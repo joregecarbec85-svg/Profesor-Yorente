@@ -1,0 +1,2793 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profesor Yorente | El Profesor Neuroeducador — Familias</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            200: '#bae0fd',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        },
+                        warm: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .admin-text-editable {
+            outline: 2px dashed rgba(245, 158, 11, 0.85);
+            outline-offset: 3px;
+            border-radius: 6px;
+            cursor: text;
+            transition: background-color 0.2s ease, outline-color 0.2s ease;
+        }
+        .admin-text-editable:hover,
+        .admin-text-editable:focus {
+            background-color: rgba(254, 243, 199, 0.35);
+            outline-color: #f59e0b;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-200 selection:text-brand-900">
+
+    <!-- Barra de Navegación -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-brand-600">Solicitud Guiada Paso a Paso</span>
+                            <h4 class="font-display font-bold text-base text-slate-900">Datos para preparar tu material didáctico</h4>
+                            <p class="text-xs text-slate-500">Para tu total tranquilidad y seguridad, los precios, la forma de pago y todo el seguimiento se enviarán directamente a tu correo electrónico antes de entregar el material.</p>
+                        </div>
+                        <button type="button" onclick="toggleChatGuidedForm()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold cursor-pointer">
+                            Volver al chat
+                        </button>
+                    </div>
+                    <div>
+                        <span class="font-display font-extrabold text-xl tracking-tight text-slate-900 block leading-none">Profesor Yorente</span>
+                        <span class="text-xs font-medium text-brand-600 tracking-wide">El Profesor Neuroeducador • Familias</span>
+                    </div>
+                </div>
+
+                <!-- Navegación Desktop -->
+                <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+                    <a href="#como-funciona" class="hover:text-brand-600 transition-colors">¿Cómo funciona?</a>
+                    <a href="#recursos-por-grado" class="hover:text-brand-600 transition-colors">Por Grado Escolar</a>
+                    <a href="#personalizado" class="hover:text-brand-600 transition-colors">Material a Medida</a>
+                <!-- Botón Acceso Chat Privado + Ícono Discreto de Acceso al Panel de Edición -->
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <button onclick="openPrivateChat(null)" class="relative inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all shadow-sm hover:shadow cursor-pointer">
+                        <i data-lucide="message-square-lock" class="w-4 h-4 text-brand-400"></i>
+                        <span>Chat Privado</span>
+                        <span id="chat-badge" class="hidden absolute -top-1.5 -right-1.5 w-5 h-5 bg-amber-500 text-white text-[11px] font-bold rounded-full flex items-center justify-center shadow">1</span>
+                    </button>
+                    <button onclick="openAdminModal()" title="Panel Privado Profesor" aria-label="Acceso al panel de edición" class="p-2.5 rounded-xl bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-700 border border-slate-200/80 transition-colors cursor-pointer">
+                        <i data-lucide="key-round" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Barra de Modo Edición Privado (Solo visible al iniciar sesión como Profesor) -->
+    <div id="admin-banner" class="hidden bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 px-4 py-2.5 text-xs sm:text-sm font-semibold shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <i data-lucide="shield-check" class="w-4 h-4"></i>
+                <span>Modo Profesor Activo: Edita textos, cambia imágenes o gestiona tus mensajes privados.</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+                <button onclick="openChangePasswordModal()" class="px-3 py-1 rounded-lg bg-white/90 hover:bg-white text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-sm transition-colors cursor-pointer">
+                    <i data-lucide="key-round" class="w-3.5 h-3.5 text-amber-700"></i>
+                    <span>Cambiar Contraseña</span>
+                </button>
+                <button onclick="logoutAdmin()" class="px-3 py-1 rounded-lg bg-slate-900 text-white text-xs hover:bg-slate-800 transition-colors cursor-pointer">
+                    Cerrar Sesión Admin
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-brand-900 to-sky-900 text-white pt-12 pb-16 sm:pt-16 sm:pb-24">
+        <!-- Elementos decorativos de fondo -->
+        <div class="absolute inset-0 opacity-20 pointer-events-none">
+            <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-amber-400 blur-3xl"></div>
+            <div class="absolute bottom-0 right-0 w-[30rem] h-[30rem] rounded-full bg-sky-400 blur-3xl"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-10 lg:gap-10 items-center">
+                <!-- Texto Principal -->
+                <div class="lg:col-span-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/20 border border-amber-300/30 text-amber-200 text-xs font-semibold mb-6">
+                        <i data-lucide="brain" class="w-3.5 h-3.5 text-amber-300"></i>
+                        <span>Neuroeducación y Pedagogía • Preescolar y Primaria</span>
+                    </div>
+                    <h1 class="font-display font-extrabold text-3xl sm:text-5xl lg:text-[3.25rem] text-white tracking-tight leading-[1.15] mb-6">
+                        Aprender en familia con <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-sky-300">neuroeducación y pedagogía</span> adaptada a tu hijo
+                    </h1>
+                    <p class="text-base sm:text-lg text-sky-100/90 leading-relaxed mb-8 max-w-2xl mx-auto lg:mx-0">
+                        Transforma el acompañamiento en casa con recursos pedagógicos diseñados según el desarrollo cognitivo y los intereses de tu pequeño. Solicita tu material de forma privada con el Profesor Yorente.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="#recursos-por-grado" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-6 py-3.5 rounded-2xl shadow-lg shadow-amber-500/25 transition-all">
+                            <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                            <span>Explorar por Grado Escolar</span>
+                        </a>
+                        <button onclick="openTailoredMaterialChat()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-sm font-semibold px-6 py-3.5 rounded-2xl transition-all cursor-pointer">
+                            <i data-lucide="wand-2" class="w-5 h-5 text-amber-300"></i>
+                            <span>Solicitar Material Adaptado</span>
+                        </button>
+                    </div>
+
+                    <!-- Garantías rápidas -->
+                    <div class="mt-10 pt-8 border-t border-white/15 grid grid-cols-3 gap-4 text-left max-w-lg mx-auto lg:mx-0">
+                        <div>
+                            <p class="font-display font-bold text-amber-300 text-sm sm:text-base">3 a 12 años</p>
+                            <p class="text-xs text-sky-200">Preescolar y Primaria</p>
+                        </div>
+                        <div>
+                            <p class="font-display font-bold text-amber-300 text-sm sm:text-base">Trato Directo</p>
+                            <p class="text-xs text-sky-200">Chat privado sin intermediarios</p>
+                        </div>
+                        <div>
+                            <p class="font-display font-bold text-amber-300 text-sm sm:text-base">Envío Digital</p>
+                            <p class="text-xs text-sky-200">Directo a tu correo PDF</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Apartado Vistoso de Foto / Avatar del Profesor + Collage Visual -->
+                <div class="lg:col-span-6 space-y-5">
+                    <!-- Tarjeta Destacada del Profesor Yorente -->
+                    <div class="relative rounded-3xl bg-white/10 backdrop-blur-md border border-white/25 p-5 sm:p-6 shadow-2xl flex flex-col sm:flex-row items-center gap-5">
+                        <div class="relative shrink-0">
+                            <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-tr from-amber-400 via-yellow-300 to-sky-400 p-1 shadow-xl">
+                                <div class="w-full h-full rounded-[20px] overflow-hidden bg-slate-900">
+                                    <img id="img-profesor-hero" src="https://placehold.co/300x300/0284c7/ffffff?text=Profesor+Yorente" onerror="this.src='https://placehold.co/300x300/0284c7/ffffff?text=Profesor+Yorente'" alt="Foto Profesor Yorente" class="w-full h-full object-cover">
+                                </div>
+                            </div>
+                            <button onclick="openEditImageModal('profesor-hero', 'Foto Principal del Profesor Yorente')" class="admin-edit-btn hidden absolute -bottom-2 -right-2 bg-amber-400 hover:bg-amber-300 text-slate-950 text-[11px] font-bold px-2.5 py-1.5 rounded-xl shadow-lg flex items-center gap-1 cursor-pointer">
+                                <i data-lucide="camera" class="w-3.5 h-3.5"></i> Cambiar
+                            </button>
+                        </div>
+                        <div class="text-center sm:text-left flex-1">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-[11px] font-bold mb-1.5">
+                                <i data-lucide="award" class="w-3.5 h-3.5"></i> Atención Personalizada
+                            </span>
+                            <h2 class="font-display font-extrabold text-xl sm:text-2xl text-white leading-tight">Profesor Yorente</h2>
+                            <p class="text-xs sm:text-sm font-medium text-sky-200 mt-0.5">El Profesor Neuroeducador • Preescolar y Primaria</p>
+                            <p class="text-xs text-slate-200/90 mt-2 leading-relaxed">Acompañando a las familias con materiales didácticos diseñados a la medida de cada niño y niña.</p>
+                        </div>
+                    </div>
+
+                    <!-- Imagen Principal Padres e Hijos -->
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-white/20 group">
+                        <img id="img-hero" src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1000&q=80" onerror="this.src='https://placehold.co/800x500/0369a1/ffffff?text=Neuroeducacion+Padres+e+Hijos'" alt="Madre e hijo aprendiendo juntos con actividades didácticas" class="w-full h-56 sm:h-64 object-cover transition-transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent"></div>
+                        
+                        <!-- Botón Edición Admin -->
+                        <button onclick="openEditImageModal('hero', 'Imagen Principal Hero (Padres e Hijos)')" class="admin-edit-btn hidden absolute top-4 right-4 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="image-plus" class="w-4 h-4"></i> Cambiar Imagen
+                        </button>
+
+                        <div class="absolute bottom-4 left-4 right-4 sm:bottom-5 sm:left-6 sm:right-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                            <div>
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/90 text-white text-[11px] font-bold mb-1">
+                                    <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span> Neuroaprendizaje Activo
+                                </span>
+                                <h3 class="font-display font-bold text-white text-base sm:text-lg">Vínculo afectivo y estimulación cognitiva en casa</h3>
+                            </div>
+                            <button onclick="openPrivateChat(null)" class="shrink-0 py-2.5 px-4 rounded-xl bg-white text-slate-900 hover:bg-amber-300 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-md cursor-pointer">
+                                <i data-lucide="messages-square" class="w-4 h-4 text-brand-600"></i>
+                                <span>Chat Privado</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Galería Visual: Pedagogía y Neuroeducación en Familia -->
+    <section id="galeria-neuro" class="py-14 bg-gradient-to-b from-slate-50 to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="text-xs font-bold uppercase tracking-wider text-brand-600">Enfoque Pedagógico</span>
+                <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-slate-900 mt-1">Padres e Hijos Construyendo Aprendizaje</h2>
+                <p class="text-sm text-slate-600 mt-2">Cada etapa infantil requiere estímulos específicos: desde la motricidad en preescolar hasta el pensamiento lógico en primaria.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Tarjeta Visual 1 -->
+                <div class="relative rounded-3xl overflow-hidden shadow-md border border-slate-200/80 bg-white group">
+                    <div class="relative h-56 overflow-hidden">
+                        <img id="img-card1" src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=800&q=80" onerror="this.src='https://placehold.co/600x400/f59e0b/ffffff?text=Estimulacion+Preescolar'" alt="Padre e hijo jugando con bloques educativos" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <button onclick="openEditImageModal('card1', 'Tarjeta 1: Estimulación Temprana')" class="admin-edit-btn hidden absolute top-3 right-3 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold px-3 py-1.5 rounded-xl shadow flex items-center gap-1 cursor-pointer">
+                            <i data-lucide="image-plus" class="w-3.5 h-3.5"></i> Cambiar
+                        </button>
+                    </div>
+                    <div class="p-5">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-amber-600">Preescolar (3 - 5 años)</span>
+                        <h3 class="font-display font-bold text-slate-900 text-base mt-1">Juego Multisensorial y Motricidad</h3>
+                        <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">Actividades que fortalecen las conexiones neuronales mediante el juego guiado junto a mamá y papá.</p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Visual 2 -->
+                <div class="relative rounded-3xl overflow-hidden shadow-md border border-slate-200/80 bg-white group">
+                    <div class="relative h-56 overflow-hidden">
+                        <img id="img-card2" src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80" onerror="this.src='https://placehold.co/600x400/0284c7/ffffff?text=Lectoescritura+Primaria'" alt="Niña leyendo y aprendiendo con acompañamiento" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <button onclick="openEditImageModal('card2', 'Tarjeta 2: Lectoescritura y Atención')" class="admin-edit-btn hidden absolute top-3 right-3 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold px-3 py-1.5 rounded-xl shadow flex items-center gap-1 cursor-pointer">
+                            <i data-lucide="image-plus" class="w-3.5 h-3.5"></i> Cambiar
+                        </button>
+                    </div>
+                    <div class="p-5">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-brand-600">Primaria (6 - 12 años)</span>
+                        <h3 class="font-display font-bold text-slate-900 text-base mt-1">Lectoescritura y Funciones Ejecutivas</h3>
+                        <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">Estrategias neurodidácticas adaptadas al ritmo de atención, memoria y comprensión de cada alumno.</p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Visual 3 -->
+                <div class="relative rounded-3xl overflow-hidden shadow-md border border-slate-200/80 bg-white group">
+                    <div class="relative h-56 overflow-hidden">
+                        <img id="img-card3" src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=800&q=80" onerror="this.src='https://placehold.co/600x400/10b981/ffffff?text=Pedagogia+en+Familia'" alt="Familia compartiendo lectura y aprendizaje" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <button onclick="openEditImageModal('card3', 'Tarjeta 3: Pedagogía en Familia')" class="admin-edit-btn hidden absolute top-3 right-3 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold px-3 py-1.5 rounded-xl shadow flex items-center gap-1 cursor-pointer">
+                            <i data-lucide="image-plus" class="w-3.5 h-3.5"></i> Cambiar
+                        </button>
+                    </div>
+                    <div class="p-5">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-600">Personalización Pedagógica</span>
+                        <h3 class="font-display font-bold text-slate-900 text-base mt-1">Materiales con sus Temas Favoritos</h3>
+                        <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">Integramos los intereses de tu hijo para despertar su curiosidad natural y motivación intrínseca.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección: Cómo Funciona el Proceso de Compra Privada -->
+    <section id="como-funciona" class="py-16 bg-white border-y border-slate-200/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="font-display font-bold text-2xl sm:text-3xl text-slate-900 mb-3">¿Cómo adquirir el material para tu hijo?</h2>
+                <p class="text-sm sm:text-base text-slate-600">Un proceso sencillo, transparente y totalmente privado diseñado para padres de familia.</p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Paso 1 -->
+                <div class="p-6 rounded-3xl bg-slate-50 border border-slate-100 relative">
+                    <div class="w-10 h-10 rounded-2xl bg-brand-600 text-white font-display font-bold flex items-center justify-center mb-4 shadow-sm">1</div>
+                    <h3 class="font-display font-bold text-slate-900 text-base mb-2">Elige y Personaliza</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Selecciona el recurso de preescolar o primaria e indica las características y necesidades de tu pequeño.</p>
+                </div>
+                <!-- Paso 2 -->
+                <div class="p-6 rounded-3xl bg-slate-50 border border-slate-100 relative">
+                    <div class="w-10 h-10 rounded-2xl bg-brand-600 text-white font-display font-bold flex items-center justify-center mb-4 shadow-sm">2</div>
+                    <h3 class="font-display font-bold text-slate-900 text-base mb-2">Chat Privado Directo</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Se abrirá tu sala privada conmigo donde revisaremos los detalles del material adaptado.</p>
+                </div>
+                <!-- Paso 3 -->
+                <div class="p-6 rounded-3xl bg-slate-50 border border-slate-100 relative">
+                    <div class="w-10 h-10 rounded-2xl bg-brand-600 text-white font-display font-bold flex items-center justify-center mb-4 shadow-sm">3</div>
+                    <h3 class="font-display font-bold text-slate-900 text-base mb-2">Precios y Pago por Correo</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Para tu tranquilidad, los precios según la adaptación y la forma de pago te serán informados directamente en tu correo electrónico antes de la entrega.</p>
+                </div>
+                <!-- Paso 4 -->
+                <div class="p-6 rounded-3xl bg-slate-50 border border-slate-100 relative">
+                    <div class="w-10 h-10 rounded-2xl bg-emerald-600 text-white font-display font-bold flex items-center justify-center mb-4 shadow-sm">4</div>
+                    <h3 class="font-display font-bold text-slate-900 text-base mb-2">Seguimiento y Entrega Segura</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Daremos seguimiento personalizado a través de tu correo electrónico y recibirás ahí mismo tu material digital listo para imprimir.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- APARTADO AMPLIADO: RECURSOS DIDÁCTICOS POR GRADO (PREESCOLAR Y PRIMARIA) -->
+    <!-- ===================================================================== -->
+    <section id="recursos-por-grado" class="py-16 sm:py-24 bg-slate-100/70">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-brand-600">Biblioteca por Nivel y Grado</span>
+                    <h2 class="font-display font-extrabold text-2xl sm:text-4xl text-slate-900 mt-1">Recursos Didácticos por Grado Escolar</h2>
+                    <p class="text-sm sm:text-base text-slate-600 mt-2 max-w-2xl">Selecciona el grado de tu hijo (Preescolar o Primaria) para explorar los documentos disponibles y solicitarlos de forma privada.</p>
+                </div>
+
+                <!-- Botones Subir Documento y Video Explicativo (Solo visible en Modo Profesor) -->
+                <div class="admin-edit-btn hidden flex flex-wrap items-center gap-3">
+                    <button onclick="openGradeVideoModal(selectedGrade)" class="inline-flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs sm:text-sm font-bold px-5 py-3.5 rounded-2xl shadow-md transition-all cursor-pointer">
+                        <i data-lucide="video" class="w-4 h-4"></i>
+                        <span>Subir / Grabar Video</span>
+                    </button>
+                    <button onclick="openGradeImageModal(null, selectedGrade)" class="inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs sm:text-sm font-bold px-5 py-3.5 rounded-2xl shadow-md transition-all cursor-pointer">
+                        <i data-lucide="image-plus" class="w-4 h-4"></i>
+                        <span>Subir Imagen</span>
+                    </button>
+                    <button onclick="openGradeDocModal(null, selectedGrade)" class="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-amber-300 text-xs sm:text-sm font-bold px-5 py-3.5 rounded-2xl shadow-md transition-all cursor-pointer">
+                        <i data-lucide="file-plus-2" class="w-4 h-4"></i>
+                        <span>Subir Documento</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pestañas de Niveles y Grados (3 de Preescolar y 6 de Primaria) -->
+            <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-sm mb-10 space-y-4">
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-600 px-2">Preescolar (3 Grados):</span>
+                    <button onclick="selectGrade('pre-1')" id="grade-tab-pre-1" class="grade-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-amber-500 text-slate-950 transition-all cursor-pointer">1° Preescolar</button>
+                    <button onclick="selectGrade('pre-2')" id="grade-tab-pre-2" class="grade-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-all cursor-pointer">2° Preescolar</button>
+                    <button onclick="selectGrade('pre-3')" id="grade-tab-pre-3" class="grade-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-all cursor-pointer">3° Preescolar</button>
+                </div>
+                <div class="border-t border-slate-100 pt-4 flex flex-wrap items-center gap-2.5">
+                    <span class="text-xs font-bold uppercase tracking-wider text-brand-600 px-2">Primaria (6 Grados):</span>
+                    <button onclick="selectGrade('pri-1')" id="grade-tab-pri-1" class="grade-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-all cursor-pointer">1° Primaria</button>
+                    <button onclick="selectGrade('pri-2')" id="grade-tab-pri-2" class="grade-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-all cursor-pointer">2° Primaria</button>
+                    <button onclick="selectGrade('pri-3')" id="grade-tab-pri-3" class="grade-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-all cursor-pointer">3° Primaria</button>
+                    <button onclick="selectGrade('pri-4')" id="grade-tab-pri-4" class="grade-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-all cursor-pointer">4° Primaria</button>
+                    <button onclick="selectGrade('pri-5')" id="grade-tab-pri-5" class="grade-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-all cursor-pointer">5° Primaria</button>
+                    <button onclick="selectGrade('pri-6')" id="grade-tab-pri-6" class="grade-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-all cursor-pointer">6° Primaria</button>
+                </div>
+            </div>
+
+            <!-- Panel Rápido de los 9 Grados para Subir Documentos y Videos (Solo visible en Modo Profesor) -->
+            <div id="admin-all-grades-panel" class="hidden mb-10 bg-white rounded-3xl border-2 border-amber-300 p-5 sm:p-6 shadow-md space-y-6">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                    <div>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-amber-600">Panel Interno Privado • Profesor Yorente</span>
+                        <h3 class="font-display font-bold text-lg text-slate-900">Bandeja de Mensajes, Solicitudes y Carga por Grado</h3>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" onclick="switchAdminPanelTab('inbox')" id="admin-tab-inbox" class="px-4 py-2 rounded-xl bg-slate-900 text-amber-300 text-xs font-bold flex items-center gap-1.5 shadow-sm cursor-pointer">
+                            <i data-lucide="inbox" class="w-4 h-4"></i>
+                            <span>Mensajes y Solicitudes</span>
+                            <span id="admin-inbox-count" class="px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[10px] font-extrabold">0</span>
+                        </button>
+                        <button type="button" onclick="switchAdminPanelTab('grades')" id="admin-tab-grades" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="folder-plus" class="w-4 h-4"></i>
+                            <span>Subir en los 9 Grados</span>
+                        </button>
+                        <button type="button" onclick="openChangePasswordModal()" class="px-4 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-bold flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="lock-keyhole" class="w-4 h-4"></i>
+                            <span>Cambiar Contraseña</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Subpanel 1: Bandeja de Mensajes Privados y Solicitudes de Material Personalizado -->
+                <div id="admin-inbox-view" class="space-y-4">
+                    <div class="grid lg:grid-cols-12 gap-5">
+                        <!-- Columna Solicitudes de Material Personalizado -->
+                        <div class="lg:col-span-6 rounded-2xl border border-brand-200/80 bg-brand-50/40 p-4 flex flex-col">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-display font-bold text-sm text-brand-950 flex items-center gap-1.5">
+                                    <i data-lucide="sparkles" class="w-4 h-4 text-brand-600"></i>
+                                    <span>Solicitudes de Material Personalizado</span>
+                                </h4>
+                                <span id="admin-requests-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-brand-600 text-white">0</span>
+                            </div>
+                            <div id="admin-custom-requests-list" class="space-y-3 max-h-80 overflow-y-auto pr-1"></div>
+                        </div>
+
+                        <!-- Columna Mensajes Privados del Público -->
+                        <div class="lg:col-span-6 rounded-2xl border border-amber-200/80 bg-amber-50/40 p-4 flex flex-col">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-display font-bold text-sm text-slate-900 flex items-center gap-1.5">
+                                    <i data-lucide="message-square-lock" class="w-4 h-4 text-amber-600"></i>
+                                    <span>Mensajes Privados de Padres de Familia</span>
+                                </h4>
+                                <span id="admin-messages-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-900 text-amber-300">0</span>
+                            </div>
+                            <div id="admin-private-messages-list" class="space-y-2.5 max-h-64 overflow-y-auto pr-1 mb-3"></div>
+                            <!-- Respuesta directa del Profesor desde su panel interno -->
+                            <form onsubmit="sendProfessorAdminReply(event)" class="mt-auto pt-2 border-t border-amber-200/70 flex items-center gap-2">
+                                <input type="text" id="admin-reply-input" placeholder="Responder directamente al chat privado como Profesor..." class="flex-1 px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                <button type="submit" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 text-xs font-bold flex items-center gap-1 cursor-pointer shrink-0">
+                                    <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                                    <span>Enviar</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subpanel 2: Carga Rápida en los 9 Grados -->
+                <div id="admin-grades-view" class="hidden">
+                    <div id="admin-grades-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                </div>
+            </div>
+
+            <!-- Contenedor de Video Explicativo del Grado (Visible si el profesor subió/grabó uno o en modo edición) -->
+            <div id="grade-video-container" class="mb-10"></div>
+
+            <!-- Contenedor de Imágenes del Grado Seleccionado -->
+            <div id="grade-images-container" class="mb-10"></div>
+
+            <!-- Contenedor Ampliado de Documentos del Grado Seleccionado -->
+            <div id="grade-docs-container" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+                <!-- Se renderiza dinámicamente cuando el profesor sube documentos -->
+            </div>
+
+            <!-- Banner Solicitud 100% Personalizada -->
+            <div id="personalizado" class="mt-16 rounded-3xl bg-gradient-to-r from-slate-900 via-brand-900 to-slate-900 p-8 sm:p-10 text-white shadow-xl relative overflow-hidden">
+                <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+                    <div class="max-w-2xl text-center lg:text-left">
+                        <span class="inline-block px-3 py-1 rounded-full bg-white/10 text-brand-200 text-xs font-semibold mb-3">Diseño Pedagógico Exclusivo</span>
+                        <h3 class="font-display font-bold text-2xl sm:text-3xl mb-3">¿Buscas un material adaptado a las características de tu hijo?</h3>
+                        <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+                            Para cualquier niño o niña de preescolar y primaria: ya sea para reforzar lectoescritura, matemáticas, motricidad o aprovechar sus personajes y temáticas favoritas, diseño un cuadernillo didáctico exclusivo para su grado y ritmo de aprendizaje.
+                        </p>
+                    </div>
+                    <button onclick="openTailoredMaterialChat()" class="w-full sm:w-auto shrink-0 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-7 py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                        <span>Pedir Material a Medida</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Imágenes alusivas a la educación de niños y niñas de preescolar -->
+            <div class="mt-16 pt-12 border-t border-slate-200/80">
+                <div class="text-center max-w-2xl mx-auto mb-8">
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Etapa Inicial • 3 a 5 Años</span>
+                    <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-slate-900 mt-1">Educación y Aprendizaje en Preescolar</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 mt-2">Niños y niñas descubriendo el mundo a través del juego, la creatividad y la estimulación neuroeducativa.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <!-- Imagen Preescolar 1 -->
+                    <div class="relative rounded-3xl overflow-hidden shadow-md border border-slate-200/80 bg-white group h-60">
+                        <img id="img-pre1" src="https://images.unsplash.com/photo-1588072432836-e10032774350?auto=format&fit=crop&w=700&q=80" onerror="this.src='https://placehold.co/600x450/f59e0b/ffffff?text=Preescolar+Creatividad'" alt="Niños de preescolar dibujando y creando" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent"></div>
+                        <button onclick="openEditImageModal('pre1', 'Preescolar 1: Arte y Motricidad')" class="admin-edit-btn hidden absolute top-3 right-3 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold px-3 py-1.5 rounded-xl shadow flex items-center gap-1 cursor-pointer">
+                            <i data-lucide="image-plus" class="w-3.5 h-3.5"></i> Cambiar
+                        </button>
+                        <div class="absolute bottom-3 left-4 right-4 text-white">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300">Motricidad Fina</span>
+                            <p class="font-display font-bold text-sm">Expresión y Trazos Iniciales</p>
+                        </div>
+                    </div>
+
+                    <!-- Imagen Preescolar 2 -->
+                    <div class="relative rounded-3xl overflow-hidden shadow-md border border-slate-200/80 bg-white group h-60">
+                        <img id="img-pre2" src="https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=700&q=80" onerror="this.src='https://placehold.co/600x450/0ea5e9/ffffff?text=Juego+Didactico'" alt="Niña jugando con material didáctico colorido" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent"></div>
+                        <button onclick="openEditImageModal('pre2', 'Preescolar 2: Juego Sensorial')" class="admin-edit-btn hidden absolute top-3 right-3 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold px-3 py-1.5 rounded-xl shadow flex items-center gap-1 cursor-pointer">
+                            <i data-lucide="image-plus" class="w-3.5 h-3.5"></i> Cambiar
+                        </button>
+                        <div class="absolute bottom-3 left-4 right-4 text-white">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-sky-300">Exploración</span>
+                            <p class="font-display font-bold text-sm">Colores, Formas y Sentidos</p>
+                        </div>
+                    </div>
+
+                    <!-- Imagen Preescolar 3 -->
+                    <div class="relative rounded-3xl overflow-hidden shadow-md border border-slate-200/80 bg-white group h-60">
+                        <img id="img-pre3" src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=700&q=80" onerror="this.src='https://placehold.co/600x450/10b981/ffffff?text=Aprendizaje+Colaborativo'" alt="Niños y niñas participando felices en clase de preescolar" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <!-- Columna Mensajes Privados del Público -->
+                        <div class="lg:col-span-6 rounded-2xl border border-amber-200/80 bg-amber-50/40 p-4 flex flex-col">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-display font-bold text-sm text-slate-900 flex items-center gap-1.5">
+                                    <i data-lucide="message-square-lock" class="w-4 h-4 text-amber-600"></i>
+                                    <span>Mensajes Privados (Hilo por Usuario)</span>
+                                </h4>
+                                <span id="admin-messages-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-900 text-amber-300">0</span>
+                            </div>
+                            <!-- Selector de Conversación Privada Individual -->
+                            <div id="admin-thread-selector" class="flex gap-1.5 overflow-x-auto pb-2 mb-2 border-b border-amber-200/60"></div>
+                            <div id="admin-private-messages-list" class="space-y-2.5 max-h-60 overflow-y-auto pr-1 mb-3"></div>
+                            <!-- Respuesta directa del Profesor desde su panel interno al usuario seleccionado -->
+                            <form onsubmit="sendProfessorAdminReply(event)" class="mt-auto pt-2 border-t border-amber-200/70 flex items-center gap-2">
+                                <input type="text" id="admin-reply-input" placeholder="Responder únicamente a esta persona privada..." class="flex-1 px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                <button type="submit" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 text-xs font-bold flex items-center gap-1 cursor-pointer shrink-0">
+                                    <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                                    <span>Enviar</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Imágenes alusivas a la educación de niños y niñas de primaria (6 a 11 años) -->
+            <div class="mt-16 pt-12 border-t border-slate-200/80">
+                <div class="text-center max-w-2xl mx-auto mb-8">
+                    <span class="text-xs font-bold uppercase tracking-wider text-brand-600">Educación Primaria • 6 a 11 Años</span>
+                    <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-slate-900 mt-1">Aprendizaje y Desarrollo en Primaria</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 mt-2">Niños y niñas fortaleciendo la lectura, el razonamiento matemático, la ciencia y la creatividad.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <!-- Imagen Primaria 1 -->
+                    <div class="relative rounded-3xl overflow-hidden shadow-md border border-slate-200/80 bg-white group h-60">
+                        <img id="img-pri1" src="https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=700&q=80" onerror="this.src='https://placehold.co/600x450/0284c7/ffffff?text=Lectura+y+Escritura'" alt="Niña de primaria leyendo un libro con entusiasmo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent"></div>
+                        <button onclick="openEditImageModal('pri1', 'Primaria 1: Comprensión Lectora')" class="admin-edit-btn hidden absolute top-3 right-3 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold px-3 py-1.5 rounded-xl shadow flex items-center gap-1 cursor-pointer">
+                            <i data-lucide="image-plus" class="w-3.5 h-3.5"></i> Cambiar
+                        </button>
+                        <div class="absolute bottom-3 left-4 right-4 text-white">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-sky-300">Lenguaje y Comunicación</span>
+                            <p class="font-display font-bold text-sm">Comprensión Lectora y Redacción</p>
+                        </div>
+                    </div>
+
+                    <!-- Imagen Primaria 2 -->
+                    <div class="relative rounded-3xl overflow-hidden shadow-md border border-slate-200/80 bg-white group h-60">
+                        <img id="img-pri2" src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=700&q=80" onerror="this.src='https://placehold.co/600x450/f59e0b/ffffff?text=Matematicas+Divertidas'" alt="Niño de primaria resolviendo ejercicios matemáticos" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent"></div>
+                        <button onclick="openEditImageModal('pri2', 'Primaria 2: Pensamiento Matemático')" class="admin-edit-btn hidden absolute top-3 right-3 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold px-3 py-1.5 rounded-xl shadow flex items-center gap-1 cursor-pointer">
+                            <i data-lucide="image-plus" class="w-3.5 h-3.5"></i> Cambiar
+                        </button>
+                        <div class="absolute bottom-3 left-4 right-4 text-white">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300">Razonamiento</span>
+                            <p class="font-display font-bold text-sm">Retos Matemáticos y Lógica</p>
+                        </div>
+                    </div>
+
+                    <!-- Imagen Primaria 3 -->
+                    <div class="relative rounded-3xl overflow-hidden shadow-md border border-slate-200/80 bg-white group h-60">
+                        <img id="img-pri3" src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=700&q=80" onerror="this.src='https://placehold.co/600x450/10b981/ffffff?text=Ciencia+y+Exploracion'" alt="Niños de primaria realizando experimentos científicos" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent"></div>
+                        <button onclick="openEditImageModal('pri3', 'Primaria 3: Ciencia y Descubrimiento')" class="admin-edit-btn hidden absolute top-3 right-3 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold px-3 py-1.5 rounded-xl shadow flex items-center gap-1 cursor-pointer">
+                            <i data-lucide="image-plus" class="w-3.5 h-3.5"></i> Cambiar
+                        </button>
+                        <div class="absolute bottom-3 left-4 right-4 text-white">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-300">Exploración del Mundo</span>
+                            <p class="font-display font-bold text-sm">Curiosidad Científica y Proyectos</p>
+                        </div>
+                    </div>
+
+                    <!-- Imagen Primaria 4 -->
+                    <div class="relative rounded-3xl overflow-hidden shadow-md border border-slate-200/80 bg-white group h-60">
+                        <img id="img-pri4" src="https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=700&q=80" onerror="this.src='https://placehold.co/600x450/8b5cf6/ffffff?text=Habitos+de+Estudio'" alt="Estudiante de primaria concentrado escribiendo en su cuaderno" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent"></div>
+                        <button onclick="openEditImageModal('pri4', 'Primaria 4: Hábitos y Autonomía')" class="admin-edit-btn hidden absolute top-3 right-3 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold px-3 py-1.5 rounded-xl shadow flex items-center gap-1 cursor-pointer">
+                            <i data-lucide="image-plus" class="w-3.5 h-3.5"></i> Cambiar
+                        </button>
+                        <div class="absolute bottom-3 left-4 right-4 text-white">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-purple-300">Funciones Ejecutivas</span>
+                            <p class="font-display font-bold text-sm">Atención, Memoria y Autonomía</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Pública para Compartir la Plataforma en Redes Sociales -->
+    <section class="bg-slate-900 text-white py-12 border-t border-slate-800">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-500/20 text-brand-300 text-xs font-bold mb-3">
+                <i data-lucide="share-2" class="w-3.5 h-3.5"></i> Comparte con más Familias
+            </span>
+            <h3 class="font-display font-bold text-xl sm:text-2xl text-white mb-2">¿Conoces a otros papás o mamás de Preescolar y Primaria?</h3>
+            <p class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto mb-6">Comparte el enlace público de esta plataforma en tus redes sociales o cópialo con un clic.</p>
+
+            <!-- Barra de Enlace Público + Botón Copiar -->
+            <div class="max-w-xl mx-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-slate-800/90 p-2 rounded-2xl border border-slate-700 mb-6">
+                <input type="text" id="public-share-url" readonly class="flex-1 bg-transparent px-3 py-2 text-xs sm:text-sm text-slate-200 focus:outline-none select-all">
+                <button type="button" onclick="copyPublicPlatformLink()" class="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer shrink-0">
+                    <i data-lucide="copy" class="w-4 h-4"></i>
+                    <span>Copiar Link</span>
+                </button>
+            </div>
+
+            <!-- Botones de Redes Sociales: WhatsApp, Facebook, Twitter (X), TikTok y Copiar Link -->
+            <div class="flex flex-wrap items-center justify-center gap-3">
+                <button type="button" onclick="shareToSocial('whatsapp')" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#25D366] hover:opacity-90 text-slate-950 font-bold text-xs sm:text-sm shadow transition-all cursor-pointer">
+                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                    <span>WhatsApp</span>
+                </button>
+
+                <button type="button" onclick="shareToSocial('facebook')" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1877F2] hover:opacity-90 text-white font-bold text-xs sm:text-sm shadow transition-all cursor-pointer">
+                    <i data-lucide="facebook" class="w-4 h-4"></i>
+                    <span>Facebook</span>
+                </button>
+
+                <button type="button" onclick="shareToSocial('twitter')" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black hover:bg-slate-950 border border-slate-700 text-white font-bold text-xs sm:text-sm shadow transition-all cursor-pointer">
+                    <i data-lucide="twitter" class="w-4 h-4"></i>
+                    <span>Twitter / X</span>
+                </button>
+
+                <button type="button" onclick="shareToSocial('tiktok')" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#00f2fe] via-slate-900 to-[#ff0050] border border-white/20 hover:opacity-90 text-white font-bold text-xs sm:text-sm shadow transition-all cursor-pointer">
+                    <i data-lucide="music-2" class="w-4 h-4"></i>
+                    <span>TikTok</span>
+                </button>
+
+                <button type="button" onclick="copyPublicPlatformLink()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs sm:text-sm shadow transition-all cursor-pointer">
+                    <i data-lucide="link" class="w-4 h-4"></i>
+                    <span>Copiar Link Público</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+            <div class="flex items-center gap-2.5">
+                <div ondblclick="openAdminModal()" class="w-8 h-8 rounded-xl bg-brand-600 text-white flex items-center justify-center select-none">
+                    <i data-lucide="book-open-check" class="w-4 h-4"></i>
+                </div>
+                <span class="font-display font-bold text-slate-800">Profesor Yorente | El Profesor Neuroeducador</span>
+            </div>
+            <p class="text-center sm:text-left text-xs">Recursos didácticos exclusivos para Preescolar y Primaria • Atención privada a familias.</p>
+            <button onclick="openPrivateChat(null)" class="text-brand-600 hover:text-brand-700 font-semibold text-xs flex items-center gap-1 cursor-pointer">
+                <i data-lucide="lock" class="w-3.5 h-3.5"></i> Abrir Chat Privado
+            </button>
+        </div>
+    </footer>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 1: SOLICITUD Y ADAPTACIÓN DEL RECURSO                           -->
+    <!-- ===================================================================== -->
+    <div id="adaptation-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 my-8">
+            <div class="flex items-start justify-between gap-4 mb-5">
+                <div>
+                    <span id="modal-badge" class="inline-block px-3 py-1 rounded-full bg-brand-50 text-brand-700 text-xs font-bold mb-2">Preescolar / Primaria</span>
+                    <h3 id="modal-title" class="font-display font-bold text-xl text-slate-900">Solicitar Recurso</h3>
+                    <p id="modal-price" class="text-xs text-slate-500 mt-1">Cotización y transferencia en chat privado.</p>
+                </div>
+                <button onclick="closeAdaptationModal()" class="p-2 rounded-xl text-slate-400 hover:bg-slate-100 cursor-pointer">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form id="adaptation-form" onsubmit="submitAdaptationRequest(event)" class="space-y-4">
+                <input type="hidden" id="selected-resource-id">
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Tu nombre (Mamá / Papá) *</label>
+                        <input type="text" id="parent-name" required placeholder="Ej. Laura Martínez" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Nombre del alumno(a) *</label>
+                        <input type="text" id="child-name" required placeholder="Ej. Mateo" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+                </div>
+
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Grado escolar *</label>
+                        <select id="child-grade" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                            <option value="1° Preescolar">1° Preescolar (3 años)</option>
+                            <option value="2° Preescolar">2° Preescolar (4 años)</option>
+                            <option value="3° Preescolar">3° Preescolar (5 años)</option>
+                            <option value="1° Primaria">1° Primaria</option>
+                            <option value="2° Primaria">2° Primaria</option>
+                            <option value="3° Primaria">3° Primaria</option>
+                            <option value="4° Primaria">4° Primaria</option>
+                            <option value="5° Primaria">5° Primaria</option>
+                            <option value="6° Primaria">6° Primaria</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Temática favorita del niño(a)</label>
+                        <input type="text" id="child-interests" placeholder="Ej. Dinosaurios, espacio, animales..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Características o necesidades de aprendizaje *</label>
+                    <textarea id="child-needs" rows="3" required placeholder="Describe cómo aprende mejor tu hijo o qué área deseas reforzar..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 px-5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
+                    <i data-lucide="message-square-lock" class="w-4 h-4"></i>
+                    <span>Iniciar Chat Privado con Profesor Yorente</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 2: SALA DE CHAT PRIVADO (TRANSFERENCIA Y CORREO)                -->
+    <!-- ===================================================================== -->
+    <div id="private-chat-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/75 backdrop-blur-sm">
+        <div class="bg-slate-50 rounded-3xl max-w-2xl w-full h-[90vh] max-h-[760px] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
+            <!-- Header Chat -->
+            <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-brand-600 flex items-center justify-center font-display font-bold text-sm">PY</div>
+                    <div>
+                        <h3 class="font-display font-bold text-sm sm:text-base flex items-center gap-1.5">
+                            <span>Profesor Yorente</span>
+                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                        </h3>
+                        <p id="chat-channel-subtitle" class="text-[11px] text-slate-300">Bandeja Privada Exclusiva • Solo visible para ti y el Profesor</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="toggleChatGuidedForm()" id="btn-toggle-chat-form" class="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer">
+                        <i data-lucide="clipboard-list" class="w-3.5 h-3.5"></i>
+                        <span>Formulario Rápido (10 datos)</span>
+                    </button>
+                    <button onclick="closePrivateChat()" class="p-2 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white cursor-pointer">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Selector de Bandeja Privada del Usuario (Chat General vs Pedir Material a Medida) -->
+            <div class="bg-slate-800 text-white px-4 py-2 flex items-center justify-between gap-2 text-[11px] border-t border-slate-700/80">
+                <div class="flex items-center gap-1.5">
+                    <button type="button" onclick="switchUserPrivateChannel('general')" id="user-tab-general" class="px-3 py-1 rounded-lg bg-brand-600 text-white font-bold cursor-pointer">
+                        Chat Privado General
+                    </button>
+                    <button type="button" onclick="switchUserPrivateChannel('medida')" id="user-tab-medida" class="px-3 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold cursor-pointer">
+                        Pedir Material a Medida
+                    </button>
+                </div>
+                <span class="text-emerald-300 flex items-center gap-1 shrink-0">
+                    <i data-lucide="lock" class="w-3 h-3"></i> Privado (Folio #<span id="user-private-folio">----</span>)
+                </span>
+            </div>
+
+            <!-- Barra de Solicitud Activa -->
+            <div id="active-order-bar" class="hidden bg-amber-50 border-b border-amber-200/80 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <span id="active-order-summary" class="font-semibold text-slate-800">Solicitud activa</span>
+                <span id="active-order-status" class="px-2.5 py-0.5 rounded-full font-semibold bg-amber-200/80 text-amber-900">En proceso privado</span>
+            </div>
+
+            <!-- Formulario Guiado Integrado dentro del Chat (10 puntos solicitados) -->
+            <div id="chat-guided-form-panel" class="hidden flex-1 overflow-y-auto p-4 sm:p-6 bg-white border-b border-slate-200">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                    <div>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-brand-600">Solicitud Guiada Paso a Paso</span>
+                        <h4 class="font-display font-bold text-base text-slate-900">Datos para preparar tu material didáctico</h4>
+                        <p class="text-xs text-slate-500">Para tu seguridad y confianza: los precios, la forma de pago y todo el seguimiento se enviarán de manera formal a tu correo electrónico antes de entregar el material.</p>
+                    </div>
+                    <button type="button" onclick="toggleChatGuidedForm()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold cursor-pointer">
+                        Volver al chat
+                    </button>
+                </div>
+
+                <form onsubmit="submitGuidedChatForm(event)" class="space-y-3.5 text-xs">
+                    <div class="grid sm:grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">1. Nombre de quien realiza la solicitud *</label>
+                            <input type="text" id="cf-requester-name" required placeholder="Ej. Ana María Gómez" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">2. Correo electrónico de contacto (escrito correctamente) *</label>
+                            <input type="email" id="cf-email" required placeholder="ejemplo@correo.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <p class="text-[10px] text-brand-700 mt-0.5">🔒 Tu correo está protegido: por este medio recibirás con claridad los precios, la forma de pago y todo el seguimiento de tu solicitud.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">3. Nivel escolar *</label>
+                            <select id="cf-level" onchange="syncChatGradeOptions()" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                <option value="Preescolar">Preescolar</option>
+                                <option value="Primaria">Primaria</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">4. Grado escolar específico *</label>
+                            <select id="cf-grade" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                <option value="Primer grado de preescolar">Primer grado de preescolar</option>
+                                <option value="Segundo grado de preescolar">Segundo grado de preescolar</option>
+                                <option value="Tercer grado de preescolar">Tercer grado de preescolar</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">5. Campo formativo que desea abordar *</label>
+                            <select id="cf-formative-field" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                <option value="Lenguajes">Lenguajes (lectura, escritura, expresión)</option>
+                                <option value="Saberes y Pensamiento Científico">Saberes y Pensamiento Científico (matemáticas, ciencias)</option>
+                                <option value="Ética, Naturaleza y Sociedades">Ética, Naturaleza y Sociedades (entorno, seres vivos)</option>
+                                <option value="De lo Humano y lo Comunitario">De lo Humano y lo Comunitario (emociones, motricidad)</option>
+                                <option value="No estoy seguro(a) — describiré el aprendizaje abajo">No estoy seguro(a) — describiré el aprendizaje</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">6. Materia o área de conocimiento *</label>
+                            <input type="text" id="cf-subject" required placeholder="Ej. Español, Matemáticas, Ciencias, lectura, emociones..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        </div>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">7. Tema o aprendizaje específico *</label>
+                            <input type="text" id="cf-topic" required placeholder="Ej. Reconocer letras, sumas, comprensión lectora..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">8. Tipo de material que necesita *</label>
+                            <select id="cf-material-type" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                <option value="Fichas imprimibles y ejercicios">Fichas imprimibles y ejercicios</option>
+                                <option value="Actividades y juegos didácticos">Actividades y juegos didácticos</option>
+                                <option value="Secuencia didáctica">Secuencia didáctica</option>
+                                <option value="Apoyos visuales">Apoyos visuales</option>
+                                <option value="Cuentos y comprensión">Cuentos y comprensión</option>
+                                <option value="Guía para trabajar en casa">Guía para trabajar en casa</option>
+                                <option value="Paquete integral personalizado">Paquete integral personalizado</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">9. Propósito del material *</label>
+                        <input type="text" id="cf-purpose" required placeholder="¿Qué esperas que el niño o niña practique, comprenda o desarrolle?" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">10. Necesidades o preferencias a considerar (Opcional)</label>
+                        <textarea id="cf-preferences" rows="2" placeholder="Intereses del niño(a), fortalezas, ritmo de trabajo, apoyos que le funcionan, formato preferido o aspectos a evitar..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 px-5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                        <span>Enviar Solicitud Completa en el Chat</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Mensajes -->
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4"></div>
+
+            <!-- Respuestas rápidas -->
+            <div id="chat-quick-replies" class="px-4 py-2 bg-white border-t border-slate-200/70 flex gap-2 overflow-x-auto">
+                <button type="button" onclick="toggleChatGuidedForm()" class="shrink-0 px-3 py-1.5 rounded-xl bg-brand-50 hover:bg-brand-100 text-brand-800 border border-brand-200 text-xs font-semibold cursor-pointer">Llenar formulario en el chat</button>
+                <button type="button" onclick="startStepByStepWizard()" class="shrink-0 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs font-semibold cursor-pointer">Responder pregunta por pregunta</button>
+                <button type="button" onclick="insertQuickReply('¿Cómo me informan los precios, la forma de pago y el seguimiento por correo?')" class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium cursor-pointer">Precios y pago seguro</button>
+            </div>
+
+            <!-- Input Chat -->
+            <form id="chat-input-form" onsubmit="sendChatMessage(event)" class="p-3 sm:p-4 bg-white border-t border-slate-200 flex items-center gap-2">
+                <input type="text" id="chat-input" placeholder="Escribe tu respuesta aquí o abre el formulario rápido arriba..." class="flex-1 px-4 py-3 rounded-2xl bg-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                <button type="submit" class="p-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white shadow-sm cursor-pointer">
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 4: SUBIR / EDITAR DOCUMENTO POR GRADO (TOTALMENTE EDITABLE)     -->
+    <!-- ===================================================================== -->
+    <div id="grade-doc-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-slate-100 my-8">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <span class="text-[11px] font-bold uppercase text-brand-600">Editor Privado por Grado</span>
+                    <h3 id="grade-doc-modal-title" class="font-display font-bold text-lg text-slate-900">Subir / Editar Recurso Didáctico</h3>
+                </div>
+                <button onclick="closeGradeDocModal()" class="p-2 rounded-xl text-slate-400 hover:bg-slate-100 cursor-pointer">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form onsubmit="saveGradeDocument(event)" class="space-y-4">
+                <input type="hidden" id="grade-doc-id">
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Grado escolar destino *</label>
+                    <select id="grade-doc-grade" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <option value="pre-1">1° Preescolar</option>
+                        <option value="pre-2">2° Preescolar</option>
+                        <option value="pre-3">3° Preescolar</option>
+                        <option value="pri-1">1° Primaria</option>
+                        <option value="pri-2">2° Primaria</option>
+                        <option value="pri-3">3° Primaria</option>
+                        <option value="pri-4">4° Primaria</option>
+                        <option value="pri-5">5° Primaria</option>
+                        <option value="pri-6">6° Primaria</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Subir archivo (cualquier formato: PDF, Word, PowerPoint, Imagen, ZIP, etc.)</label>
+                    <input type="file" id="grade-doc-file" onchange="handleGradeFileSelect(event)" class="w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
+                    <p id="grade-doc-file-status" class="text-[11px] text-slate-500 mt-1">Ningún archivo nuevo seleccionado</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Título del recurso (Editable) *</label>
+                    <input type="text" id="grade-doc-title" required placeholder="Escribe el título que desees mostrar..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Descripción (Editable) *</label>
+                    <textarea id="grade-doc-desc" rows="3" required placeholder="Describe libremente el contenido o propósito de este material..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Color de la tarjeta (Editable)</label>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <input type="color" id="grade-doc-color" value="#0284c7" class="w-12 h-10 rounded-xl border border-slate-200 cursor-pointer p-1 bg-white">
+                        <div class="flex gap-1.5">
+                            <button type="button" onclick="setDocColor('#0284c7')" class="w-7 h-7 rounded-lg bg-[#0284c7] border border-black/10 cursor-pointer" title="Azul"></button>
+                            <button type="button" onclick="setDocColor('#f59e0b')" class="w-7 h-7 rounded-lg bg-[#f59e0b] border border-black/10 cursor-pointer" title="Ámbar"></button>
+                            <button type="button" onclick="setDocColor('#10b981')" class="w-7 h-7 rounded-lg bg-[#10b981] border border-black/10 cursor-pointer" title="Esmeralda"></button>
+                            <button type="button" onclick="setDocColor('#8b5cf6')" class="w-7 h-7 rounded-lg bg-[#8b5cf6] border border-black/10 cursor-pointer" title="Violeta"></button>
+                            <button type="button" onclick="setDocColor('#ec4899')" class="w-7 h-7 rounded-lg bg-[#ec4899] border border-black/10 cursor-pointer" title="Rosa"></button>
+                            <button type="button" onclick="setDocColor('#0f172a')" class="w-7 h-7 rounded-lg bg-[#0f172a] border border-black/10 cursor-pointer" title="Oscuro"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeGradeDocModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">Cancelar</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow cursor-pointer">Guardar Recurso</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 5: SUBIR O GRABAR VIDEO EXPLICATIVO POR GRADO (MODO PROFESOR)   -->
+    <!-- ===================================================================== -->
+    <div id="grade-video-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/75 backdrop-blur-sm overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-slate-100 my-8">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <span class="text-[11px] font-bold uppercase text-amber-600">Presentación en Video por Grado</span>
+                    <h3 id="grade-video-modal-title" class="font-display font-bold text-lg text-slate-900">Video Explicativo del Grado</h3>
+                </div>
+                <button onclick="closeGradeVideoModal()" class="p-2 rounded-xl text-slate-400 hover:bg-slate-100 cursor-pointer">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form onsubmit="saveGradeVideo(event)" class="space-y-4">
+                <input type="hidden" id="grade-video-target-grade">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Grado escolar destino *</label>
+                    <select id="grade-video-grade-select" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <option value="pre-1">1° Preescolar</option>
+                        <option value="pre-2">2° Preescolar</option>
+                        <option value="pre-3">3° Preescolar</option>
+                        <option value="pri-1">1° Primaria</option>
+                        <option value="pri-2">2° Primaria</option>
+                        <option value="pri-3">3° Primaria</option>
+                        <option value="pri-4">4° Primaria</option>
+                        <option value="pri-5">5° Primaria</option>
+                        <option value="pri-6">6° Primaria</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Título del video *</label>
+                    <input type="text" id="grade-video-title" required placeholder="Ej. Conoce por dentro el Cuadernillo de este grado" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Descripción breve para los padres</label>
+                    <textarea id="grade-video-desc" rows="2" placeholder="Explica qué verán los papás en este recorrido..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                </div>
+
+                <!-- Opción A: Grabar directamente con cámara y micrófono -->
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                            <i data-lucide="camera" class="w-4 h-4 text-rose-500"></i> Opción 1: Grabar video ahora mismo
+                        </span>
+                        <span id="recording-indicator" class="hidden items-center gap-1.5 text-[11px] font-bold text-rose-600">
+                            <span class="w-2 h-2 rounded-full bg-rose-600 animate-ping"></span> Grabando...
+                        </span>
+                    </div>
+
+                    <video id="camera-preview" autoplay muted playsinline class="hidden w-full h-44 bg-slate-900 rounded-xl object-cover"></video>
+
+                    <div class="flex flex-wrap gap-2">
+                        <button type="button" id="btn-start-record" onclick="startVideoRecording()" class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="circle-dot" class="w-3.5 h-3.5"></i> Iniciar Grabación
+                        </button>
+                        <button type="button" id="btn-stop-record" onclick="stopVideoRecording()" class="hidden px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="square" class="w-3.5 h-3.5"></i> Detener Grabación
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Opción B: Subir archivo de video -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Opción 2: Subir video desde tu dispositivo (MP4, MOV, WebM)</label>
+                    <input type="file" id="grade-video-file" accept="video/*" onchange="handleGradeVideoFile(event)" class="w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-800 hover:file:bg-amber-100 cursor-pointer">
+                </div>
+
+                <!-- Opción C: Enlace de video (YouTube, Vimeo, Drive) -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Opción 3: Pegar enlace de video (YouTube / Drive)</label>
+                    <input type="url" id="grade-video-url" placeholder="https://www.youtube.com/watch?v=..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+
+                <p id="grade-video-status" class="text-[11px] font-medium text-emerald-700"></p>
+
+                <div class="flex items-center justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeGradeVideoModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">Cancelar</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold shadow cursor-pointer">Publicar Video en el Grado</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 6: SUBIR / EDITAR IMAGEN POR GRADO (MODO PROFESOR)              -->
+    <!-- ===================================================================== -->
+    <div id="grade-image-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/75 backdrop-blur-sm overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-slate-100 my-8">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <span class="text-[11px] font-bold uppercase text-emerald-600">Galería Visual por Grado</span>
+                    <h3 id="grade-image-modal-title" class="font-display font-bold text-lg text-slate-900">Subir Imagen del Material</h3>
+                </div>
+                <button onclick="closeGradeImageModal()" class="p-2 rounded-xl text-slate-400 hover:bg-slate-100 cursor-pointer">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form onsubmit="saveGradeImage(event)" class="space-y-4">
+                <input type="hidden" id="grade-image-id">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Grado escolar destino *</label>
+                    <select id="grade-image-grade-select" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <option value="pre-1">1° Preescolar</option>
+                        <option value="pre-2">2° Preescolar</option>
+                        <option value="pre-3">3° Preescolar</option>
+                        <option value="pri-1">1° Primaria</option>
+                        <option value="pri-2">2° Primaria</option>
+                        <option value="pri-3">3° Primaria</option>
+                        <option value="pri-4">4° Primaria</option>
+                        <option value="pri-5">5° Primaria</option>
+                        <option value="pri-6">6° Primaria</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Opción 1: Subir imagen desde tu dispositivo *</label>
+                    <input type="file" id="grade-image-file" accept="image/*" onchange="handleGradeImageFile(event)" class="w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-800 hover:file:bg-emerald-100 cursor-pointer">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Opción 2: Pegar enlace (URL) de imagen</label>
+                    <input type="url" id="grade-image-url" placeholder="https://ejemplo.com/imagen-cuadernillo.jpg" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Título o pie de foto (Editable) *</label>
+                    <input type="text" id="grade-image-title" required placeholder="Ej. Muestra de actividades del cuadernillo" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Descripción breve (Opcional)</label>
+                    <textarea id="grade-image-desc" rows="2" placeholder="Describe qué se observa en esta imagen..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                </div>
+
+                <p id="grade-image-status" class="text-[11px] font-medium text-emerald-700"></p>
+
+                <div class="flex items-center justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeGradeImageModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">Cancelar</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold shadow cursor-pointer">Guardar Imagen en el Grado</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 3: ACCESO PRIVADO PROFESOR Y EDICIÓN DE IMÁGENES               -->
+    <!-- ===================================================================== -->
+    <div id="admin-login-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-100">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center">
+                        <i data-lucide="key-round" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-display font-bold text-lg text-slate-900">Acceso Privado Profesor</h3>
+                        <p class="text-xs text-slate-500">Gestiona las fotografías de la plataforma</p>
+                    </div>
+                </div>
+                <button onclick="closeAdminModal()" class="p-2 rounded-xl text-slate-400 hover:bg-slate-100 cursor-pointer">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">PIN o contraseña de acceso privado</label>
+                    <input type="password" id="admin-password" required placeholder="Ingresa tu clave privada" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    <p class="text-[11px] text-slate-400 mt-1">Ingresa tu clave privada para editar textos, imágenes, documentos y videos.</p>
+                </div>
+                <button type="submit" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition-colors cursor-pointer">
+                    Ingresar al Modo Edición
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Cambiar Imagen Específica -->
+    <div id="edit-image-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-100">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <span class="text-[11px] font-bold uppercase text-amber-600">Editor Visual Privado</span>
+                    <h3 id="edit-image-title" class="font-display font-bold text-lg text-slate-900">Cambiar Fotografía</h3>
+                </div>
+                <button onclick="closeEditImageModal()" class="p-2 rounded-xl text-slate-400 hover:bg-slate-100 cursor-pointer">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form onsubmit="saveCustomImage(event)" class="space-y-4">
+                <input type="hidden" id="edit-image-key">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Opción 1: Subir foto desde tu dispositivo</label>
+                    <input type="file" id="edit-image-file" accept="image/*" onchange="previewUploadedFile(event)" class="w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Opción 2: Pegar enlace (URL) de imagen</label>
+                    <input type="url" id="edit-image-url" placeholder="https://ejemplo.com/foto-padres-hijos.jpg" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeEditImageModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">Cancelar</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow cursor-pointer">Guardar Nueva Imagen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 7: CAMBIAR CONTRASEÑA / PIN DE ACCESO PRIVADO                   -->
+    <!-- ===================================================================== -->
+    <div id="change-password-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/75 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-100">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center">
+                        <i data-lucide="lock-keyhole" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-display font-bold text-lg text-slate-900">Cambiar Contraseña Privada</h3>
+                        <p class="text-xs text-slate-500">Actualiza tu clave de acceso cuando quieras</p>
+                    </div>
+                </div>
+                <button onclick="closeChangePasswordModal()" class="p-2 rounded-xl text-slate-400 hover:bg-slate-100 cursor-pointer">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleChangePassword(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Contraseña o PIN actual *</label>
+                    <input type="password" id="current-admin-pass" required placeholder="Ingresa tu clave actual" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nueva contraseña o PIN *</label>
+                    <input type="password" id="new-admin-pass" required minlength="4" placeholder="Escribe tu nueva clave (mín. 4 caracteres)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Confirmar nueva contraseña *</label>
+                    <input type="password" id="confirm-admin-pass" required minlength="4" placeholder="Repite tu nueva clave" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+                <div class="flex items-center justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeChangePasswordModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">Cancelar</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 text-xs font-bold shadow cursor-pointer">Guardar Nueva Contraseña</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notificación Toast (Sin alert) -->
+    <div id="toast-notification" class="fixed bottom-5 right-5 z-50 hidden items-center gap-3 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl text-sm font-medium">
+        <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i>
+        <span id="toast-text">Copiado al portapapeles</span>
+    </div>
+
+    <script>
+        // Estado de la aplicación
+        let selectedGrade = 'pre-1';
+        let activeRequest = null;
+        let isAdminLogged = false;
+        let adminSecretKey = '14DPR0883R';
+        const customRequestsInbox = [];
+        let pendingFileDataUrl = null;
+        let pendingGradeFile = null;
+        let pendingGradeVideoUrl = null;
+        let pendingGradeImageUrl = null;
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        let activeMediaStream = null;
+
+        // Identificador privado único del visitante en su navegador (nadie más puede ver sus mensajes)
+        const STORAGE_THREADS_KEY = 'yorente_private_threads_v1';
+        const STORAGE_REQUESTS_KEY = 'yorente_custom_requests_v1';
+        const SESSION_USER_KEY = 'yorente_private_user_token';
+
+        function getPrivateUserToken() {
+            let token = sessionStorage.getItem(SESSION_USER_KEY);
+            if (!token) {
+                token = 'USR-' + Math.random().toString(36).substring(2, 6).toUpperCase() + '-' + Date.now().toString().slice(-4);
+                sessionStorage.setItem(SESSION_USER_KEY, token);
+            }
+            return token;
+        }
+
+        const currentPrivateUserToken = getPrivateUserToken();
+        let activeUserChannel = 'general'; // 'general' | 'medida'
+        let adminSelectedThreadKey = `${currentPrivateUserToken}::general`;
+
+        function loadStoredThreads() {
+            try {
+                const raw = localStorage.getItem(STORAGE_THREADS_KEY);
+                return raw ? JSON.parse(raw) : {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveStoredThreads(threads) {
+            try {
+                localStorage.setItem(STORAGE_THREADS_KEY, JSON.stringify(threads));
+            } catch (e) {}
+        }
+
+        function loadStoredRequests() {
+            try {
+                const raw = localStorage.getItem(STORAGE_REQUESTS_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    customRequestsInbox.splice(0, customRequestsInbox.length, ...parsed);
+                }
+            } catch (e) {}
+        }
+
+        function saveStoredRequests() {
+            try {
+                localStorage.setItem(STORAGE_REQUESTS_KEY, JSON.stringify(customRequestsInbox));
+            } catch (e) {}
+        }
+
+        function getInitialGreetingMessage(channelType) {
+            const introPrefix = channelType === 'medida'
+                ? '✨ Bienvenido(a) a tu bandeja privada de Material a Medida (un espacio confidencial exclusivo entre tú y el Profesor Yorente).\n\n'
+                : '🔒 Bienvenido(a) a tu bandeja privada (un espacio confidencial exclusivo entre tú y el Profesor Yorente).\n\n';
+            return {
+                sender: 'profesor',
+                time: getCurrentTime(),
+                text: introPrefix + '¡Hola! Gracias por escribir. Puedo ayudarte a solicitar material didáctico general o adaptado a las necesidades de aprendizaje de tu hijo o hija. Para preparar una propuesta adecuada, cuéntame un poco sobre el grado escolar, el área que deseas trabajar y el tipo de material que necesitas.\n\n🛡️ Para tu total tranquilidad y seguridad como padre o madre de familia: tanto los precios como la forma de pago te serán informados claramente por correo electrónico antes de entregar el material, y todo el seguimiento de tu solicitud se realizará directamente a través de tu correo. Por ello, es muy importante que agregues tu correo electrónico en tu solicitud.\n\nPuedes responderme aquí mismo paso a paso o usar el botón "Formulario Rápido (10 datos)" en la parte superior.',
+                hasWizardTrigger: true
+            };
+        }
+
+        function getUserThreadMessages(channelType) {
+            const threads = loadStoredThreads();
+            const threadKey = `${currentPrivateUserToken}::${channelType}`;
+            if (!threads[threadKey]) {
+                threads[threadKey] = {
+                    threadKey,
+                    userToken: currentPrivateUserToken,
+                    channelType,
+                    channelLabel: channelType === 'medida' ? 'Pedir Material a Medida' : 'Chat Privado General',
+                    authorName: 'Visitante Privado #' + currentPrivateUserToken.slice(-4),
+                    messages: [getInitialGreetingMessage(channelType)]
+                };
+                saveStoredThreads(threads);
+            }
+            return threads[threadKey].messages;
+        }
+
+        function appendUserThreadMessage(channelType, msgObj, authorNameUpdate) {
+            const threads = loadStoredThreads();
+            const threadKey = `${currentPrivateUserToken}::${channelType}`;
+            if (!threads[threadKey]) {
+                getUserThreadMessages(channelType);
+            }
+            const freshThreads = loadStoredThreads();
+            freshThreads[threadKey].messages.push(msgObj);
+            if (authorNameUpdate) {
+                freshThreads[threadKey].authorName = authorNameUpdate;
+            }
+            saveStoredThreads(freshThreads);
+        }
+
+        // Inicialización al cargar
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStoredRequests();
+            getUserThreadMessages('general');
+            getUserThreadMessages('medida');
+            const folioEl = document.getElementById('user-private-folio');
+            if (folioEl) folioEl.textContent = currentPrivateUserToken.slice(-4);
+            renderAdminGradesGrid();
+            renderAdminInbox();
+            renderGradeVideo();
+            renderGradeImages();
+            renderGradeDocuments();
+            const shareInput = document.getElementById('public-share-url');
+            if (shareInput) {
+                shareInput.value = window.location.href;
+            }
+            lucide.createIcons();
+        });
+
+        // Atajo secreto de teclado (Ctrl + Shift + Y) o parámetro ?admin=1 para abrir tu acceso privado
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'y') {
+                e.preventDefault();
+                openAdminModal();
+            }
+        });
+
+        if (new URLSearchParams(window.location.search).get('profesor') === '1') {
+            window.addEventListener('load', () => openAdminModal());
+        }
+
+        // =========================================================================
+        // GESTIÓN PRIVADA DE IMÁGENES Y TEXTOS EDITABLES (MODO PROFESOR)
+        // =========================================================================
+        function toggleInlineTextEditing(enable) {
+            const selectors = 'h1, h2, h3, h4, p, span, a';
+            document.querySelectorAll(selectors).forEach(el => {
+                // Excluir elementos dentro de modales de administración, chat o barras de control
+                if (el.closest('#admin-banner') || el.closest('#admin-all-grades-panel') || el.closest('#admin-login-modal') || el.closest('#change-password-modal') || el.closest('#edit-image-modal') || el.closest('#grade-doc-modal') || el.closest('#grade-video-modal') || el.closest('#grade-image-modal') || el.closest('#private-chat-modal') || el.closest('#toast-notification')) {
+                    return;
+                }
+                // Evitar contenedores que solo envuelven íconos o hijos complejos sin texto directo
+                const hasDirectText = Array.from(el.childNodes).some(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim().length > 0);
+                if (!hasDirectText) return;
+
+                if (enable) {
+                    el.setAttribute('contenteditable', 'true');
+                    el.classList.add('admin-text-editable');
+                    if (el.tagName === 'A' || el.closest('button')) {
+                        el.dataset.preventNav = 'true';
+                    }
+                } else {
+                    el.removeAttribute('contenteditable');
+                    el.classList.remove('admin-text-editable');
+                    delete el.dataset.preventNav;
+                }
+            });
+        }
+
+        // Evitar que enlaces o botones disparen navegación mientras se edita su texto en Modo Profesor
+        document.addEventListener('click', (e) => {
+            if (!isAdminLogged) return;
+            const editableTarget = e.target.closest('[contenteditable="true"]');
+            if (editableTarget && (editableTarget.tagName === 'A' || editableTarget.closest('a') || editableTarget.closest('button'))) {
+                e.preventDefault();
+                e.stopPropagation();
+                editableTarget.focus();
+            }
+        }, true);
+
+        function openAdminModal() {
+            if (isAdminLogged) {
+                showToast('El modo edición privado ya está activo');
+                return;
+            }
+            const modal = document.getElementById('admin-login-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeAdminModal() {
+            const modal = document.getElementById('admin-login-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function handleAdminLogin(event) {
+            event.preventDefault();
+            const pass = document.getElementById('admin-password').value.trim();
+            if (pass === adminSecretKey) {
+                isAdminLogged = true;
+                document.getElementById('admin-banner').classList.remove('hidden');
+                document.getElementById('admin-all-grades-panel').classList.remove('hidden');
+                document.querySelectorAll('.admin-edit-btn').forEach(btn => btn.classList.remove('hidden'));
+                toggleInlineTextEditing(true);
+                renderAdminInbox();
+                renderAdminGradesGrid();
+                renderGradeVideo();
+                renderGradeImages();
+                renderGradeDocuments();
+                closeAdminModal();
+                document.getElementById('admin-password').value = '';
+                showToast('Modo edición privado activo: revisa mensajes, solicitudes o edita el sitio.');
+            } else {
+                showToast('Contraseña o PIN incorrecto. Verifica e intenta nuevamente.');
+            }
+        }
+
+        function openChangePasswordModal() {
+            if (!isAdminLogged) return;
+            document.getElementById('current-admin-pass').value = '';
+            document.getElementById('new-admin-pass').value = '';
+            document.getElementById('confirm-admin-pass').value = '';
+            const modal = document.getElementById('change-password-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeChangePasswordModal() {
+            const modal = document.getElementById('change-password-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function handleChangePassword(event) {
+            event.preventDefault();
+            const currentPass = document.getElementById('current-admin-pass').value.trim();
+            const newPass = document.getElementById('new-admin-pass').value.trim();
+            const confirmPass = document.getElementById('confirm-admin-pass').value.trim();
+
+            if (currentPass !== adminSecretKey) {
+                showToast('La contraseña actual no coincide.');
+                return;
+            }
+            if (newPass.length < 4) {
+                showToast('La nueva contraseña debe tener al menos 4 caracteres.');
+                return;
+            }
+            if (newPass !== confirmPass) {
+                showToast('La confirmación de la nueva contraseña no coincide.');
+                return;
+            }
+
+            adminSecretKey = newPass;
+            closeChangePasswordModal();
+            showToast('Contraseña privada actualizada correctamente.');
+        }
+
+        function switchAdminPanelTab(tabName) {
+            const inboxView = document.getElementById('admin-inbox-view');
+            const gradesView = document.getElementById('admin-grades-view');
+            const btnInbox = document.getElementById('admin-tab-inbox');
+            const btnGrades = document.getElementById('admin-tab-grades');
+
+            if (tabName === 'inbox') {
+                inboxView.classList.remove('hidden');
+                gradesView.classList.add('hidden');
+                btnInbox.className = 'px-4 py-2 rounded-xl bg-slate-900 text-amber-300 text-xs font-bold flex items-center gap-1.5 shadow-sm cursor-pointer';
+                btnGrades.className = 'px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer';
+                renderAdminInbox();
+            } else {
+                inboxView.classList.add('hidden');
+                gradesView.classList.remove('hidden');
+                btnGrades.className = 'px-4 py-2 rounded-xl bg-slate-900 text-amber-300 text-xs font-bold flex items-center gap-1.5 shadow-sm cursor-pointer';
+                btnInbox.className = 'px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer';
+                renderAdminGradesGrid();
+            }
+        }
+
+        function renderAdminInbox() {
+            const reqList = document.getElementById('admin-custom-requests-list');
+            const msgList = document.getElementById('admin-private-messages-list');
+            const threadSelector = document.getElementById('admin-thread-selector');
+            const reqBadge = document.getElementById('admin-requests-badge');
+            const msgBadge = document.getElementById('admin-messages-badge');
+            const totalBadge = document.getElementById('admin-inbox-count');
+            if (!reqList || !msgList) return;
+
+            loadStoredRequests();
+            const threads = loadStoredThreads();
+            const threadKeys = Object.keys(threads);
+            let totalParentMsgs = 0;
+            threadKeys.forEach(k => {
+                totalParentMsgs += (threads[k].messages || []).filter(m => m.sender === 'parent').length;
+            });
+
+            if (reqBadge) reqBadge.textContent = customRequestsInbox.length;
+            if (msgBadge) msgBadge.textContent = totalParentMsgs;
+            if (totalBadge) totalBadge.textContent = customRequestsInbox.length + totalParentMsgs;
+
+            if (customRequestsInbox.length === 0) {
+                reqList.innerHTML = `
+                    <div class="rounded-xl bg-white/80 border border-brand-100 p-4 text-center text-xs text-slate-500">
+                        Aún no hay solicitudes de material personalizado registradas.
+                    </div>
+                `;
+            } else {
+                reqList.innerHTML = customRequestsInbox.map(req => `
+                    <div class="rounded-xl bg-white border border-brand-200/70 p-3.5 shadow-sm space-y-1.5 text-xs">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="font-bold text-brand-800">${req.parentName} • ${req.childName}</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-semibold">${req.channelLabel || 'Privado'} • ${req.time}</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1.5">
+                            <span class="px-2 py-0.5 rounded-md bg-brand-100 text-brand-900 font-semibold text-[11px]">${req.childGrade}</span>
+                            <span class="px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 font-semibold text-[11px]">Tema: ${req.childInterests}</span>
+                            ${req.email ? `<span class="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-900 font-semibold text-[11px]">Correo: ${req.email}</span>` : ''}
+                        </div>
+                        <p class="text-slate-600 leading-relaxed pt-1">${req.childNeeds}</p>
+                        ${req.threadKey ? `
+                            <div class="pt-1.5 flex justify-end">
+                                <button type="button" onclick="selectAdminThread('${req.threadKey}')" class="text-[11px] font-bold text-brand-700 hover:underline flex items-center gap-1 cursor-pointer">
+                                    <i data-lucide="reply" class="w-3.5 h-3.5"></i> Ver y Responder Hilo Privado
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('');
+            }
+
+            if (threadKeys.length === 0) {
+                if (threadSelector) threadSelector.innerHTML = '';
+                msgList.innerHTML = `
+                    <div class="rounded-xl bg-white/80 border border-amber-100 p-4 text-center text-xs text-slate-500">
+                        Los mensajes privados de cada usuario aparecerán aquí de forma individual.
+                    </div>
+                `;
+            } else {
+                if (!threads[adminSelectedThreadKey]) {
+                    adminSelectedThreadKey = threadKeys[0];
+                }
+                if (threadSelector) {
+                    threadSelector.innerHTML = threadKeys.map(k => {
+                        const t = threads[k];
+                        const isSelected = k === adminSelectedThreadKey;
+                        const parentCount = (t.messages || []).filter(m => m.sender === 'parent').length;
+                        return `
+                            <button type="button" onclick="selectAdminThread('${k}')" class="shrink-0 px-2.5 py-1.5 rounded-lg text-[11px] font-bold flex items-center gap-1.5 cursor-pointer transition-colors ${isSelected ? 'bg-slate-900 text-amber-300' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'}">
+                                <span>${t.authorName}</span>
+                                <span class="px-1.5 py-0.2 rounded bg-amber-400/20 text-[10px]">${t.channelType === 'medida' ? 'A Medida' : 'General'} (${parentCount})</span>
+                            </button>
+                        `;
+                    }).join('');
+                }
+
+                const activeThread = threads[adminSelectedThreadKey];
+                const threadMsgs = activeThread ? activeThread.messages : [];
+                if (threadMsgs.length === 0) {
+                    msgList.innerHTML = `<div class="text-center text-xs text-slate-500 p-4">Sin mensajes en este hilo.</div>`;
+                } else {
+                    msgList.innerHTML = threadMsgs.map(msg => {
+                        const isProf = msg.sender === 'profesor';
+                        return `
+                            <div class="rounded-xl p-3 text-xs ${isProf ? 'bg-slate-900 text-white ml-4' : 'bg-white border border-amber-200/80 text-slate-800 mr-4'}">
+                                <div class="flex items-center justify-between gap-2 mb-1">
+                                    <span class="font-bold text-[11px] ${isProf ? 'text-amber-300' : 'text-brand-700'}">
+                                        ${isProf ? 'Tú (Profesor Yorente)' : `${activeThread.authorName} • ${activeThread.channelLabel}`}
+                                    </span>
+                                    <span class="text-[10px] text-slate-400">${msg.time}</span>
+                                </div>
+                                <p class="whitespace-pre-line leading-relaxed">${msg.text}</p>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+            lucide.createIcons();
+        }
+
+        function selectAdminThread(threadKey) {
+            adminSelectedThreadKey = threadKey;
+            renderAdminInbox();
+        }
+
+        function sendProfessorAdminReply(event) {
+            event.preventDefault();
+            const input = document.getElementById('admin-reply-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const threads = loadStoredThreads();
+            if (!threads[adminSelectedThreadKey]) {
+                showToast('Selecciona una conversación privada primero');
+                return;
+            }
+
+            threads[adminSelectedThreadKey].messages.push({
+                sender: 'profesor',
+                time: getCurrentTime(),
+                text
+            });
+            saveStoredThreads(threads);
+            input.value = '';
+            renderAdminInbox();
+            renderChatMessages();
+            showToast('Respuesta privada enviada únicamente a ese usuario');
+        }
+
+        function logoutAdmin() {
+            isAdminLogged = false;
+            document.getElementById('admin-banner').classList.add('hidden');
+            document.getElementById('admin-all-grades-panel').classList.add('hidden');
+            document.querySelectorAll('.admin-edit-btn').forEach(btn => btn.classList.add('hidden'));
+            toggleInlineTextEditing(false);
+            renderGradeVideo();
+            renderGradeImages();
+            renderGradeDocuments();
+            showToast('Sesión privada cerrada');
+        }
+
+        function openEditImageModal(key, label) {
+            if (!isAdminLogged) return;
+            pendingFileDataUrl = null;
+            document.getElementById('edit-image-key').value = key;
+            document.getElementById('edit-image-title').textContent = label;
+            document.getElementById('edit-image-url').value = '';
+            document.getElementById('edit-image-file').value = '';
+            const modal = document.getElementById('edit-image-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeEditImageModal() {
+            const modal = document.getElementById('edit-image-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function previewUploadedFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                pendingFileDataUrl = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveCustomImage(event) {
+            event.preventDefault();
+            const key = document.getElementById('edit-image-key').value;
+            const urlInput = document.getElementById('edit-image-url').value.trim();
+            const targetImg = document.getElementById(`img-${key}`);
+
+            if (!targetImg) return;
+
+            if (pendingFileDataUrl) {
+                targetImg.src = pendingFileDataUrl;
+                closeEditImageModal();
+                showToast('Fotografía actualizada correctamente');
+            } else if (urlInput) {
+                targetImg.src = urlInput;
+                closeEditImageModal();
+                showToast('Fotografía actualizada desde enlace');
+            } else {
+                showToast('Selecciona un archivo o ingresa un enlace de imagen');
+            }
+        }
+
+        // Obtener hora actual formateada
+        function getCurrentTime() {
+            return new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Mostrar notificación toast
+        function showToast(message) {
+            const toast = document.getElementById('toast-notification');
+            document.getElementById('toast-text').textContent = message;
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 3000);
+        }
+
+        // Abrir modal para solicitud 100% personalizada
+        function openCustomRequestModal() {
+            document.getElementById('selected-resource-id').value = 'custom';
+            document.getElementById('modal-badge').textContent = 'Preescolar o Primaria • Neuroeducación y Pedagogía';
+            document.getElementById('modal-title').textContent = 'Solicitud de Material 100% Personalizado';
+            document.getElementById('modal-price').textContent = 'Cotización personalizada y datos de transferencia directamente en el chat privado.';
+
+            const modal = document.getElementById('adaptation-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeAdaptationModal() {
+            const modal = document.getElementById('adaptation-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Procesar solicitud y abrir el Chat Privado automáticamente
+        function submitAdaptationRequest(event) {
+            event.preventDefault();
+
+            const parentName = document.getElementById('parent-name').value.trim();
+            const childName = document.getElementById('child-name').value.trim();
+            const childGrade = document.getElementById('child-grade').value;
+            const childInterests = document.getElementById('child-interests').value.trim() || 'Generales';
+            const childNeeds = document.getElementById('child-needs').value.trim();
+
+            const title = 'Cuadernillo 100% Personalizado a Medida';
+
+            activeRequest = {
+                id: 'req-' + Date.now(),
+                time: getCurrentTime(),
+                parentName,
+                childName,
+                childGrade,
+                childInterests,
+                childNeeds,
+                email: '',
+                title
+            };
+            customRequestsInbox.unshift(activeRequest);
+
+            closeAdaptationModal();
+
+            chatHistory.push({
+                sender: 'parent',
+                time: getCurrentTime(),
+                text: `Hola Profesor Yorente, soy ${parentName}. Solicito el recurso "${title}" para ${childName} (${childGrade}).\n• Temática favorita: ${childInterests}\n• Necesidades / Características: ${childNeeds}`
+            });
+            renderAdminInbox();
+
+            openPrivateChat(null);
+
+            setTimeout(() => {
+                chatHistory.push({
+                    sender: 'profesor',
+                    time: getCurrentTime(),
+                    text: `¡Hola ${parentName}! Qué gusto saludarte. Ya revisé el perfil de ${childName} (${childGrade}) con temática de ${childInterests}.\n\nAquí tienes los datos para realizar tu transferencia de forma privada:\n\n🏦 Banco: BBVA México\n👤 Titular: Prof. Yorente Educación\n💳 CLABE Interbancaria: 0121 8001 5489 2310 45\n📝 Concepto: Material ${childName}\n\nPor favor, envíame por aquí mismo:\n1. Tu correo electrónico donde te mandaré el cuadernillo adaptado.\n2. Tu confirmación o comprobante de transferencia.`,
+                    hasBankCard: true
+                });
+                renderChatMessages();
+                renderAdminInbox();
+            }, 900);
+        }
+
+        // =========================================================================
+        // SALA DE CHAT PRIVADO (BANDEJA EXCLUSIVA POR USUARIO Y CANAL)
+        // =========================================================================
+        function switchUserPrivateChannel(channelType) {
+            activeUserChannel = channelType;
+            chatWizardActive = false;
+            chatWizardStepIndex = 0;
+
+            const tabGen = document.getElementById('user-tab-general');
+            const tabMed = document.getElementById('user-tab-medida');
+            const subtitle = document.getElementById('chat-channel-subtitle');
+
+            if (channelType === 'medida') {
+                if (tabMed) tabMed.className = 'px-3 py-1 rounded-lg bg-amber-400 text-slate-950 font-bold cursor-pointer';
+                if (tabGen) tabGen.className = 'px-3 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold cursor-pointer';
+                if (subtitle) subtitle.textContent = 'Bandeja Privada: Pedir Material a Medida • Solo visible para ti y el Profesor';
+            } else {
+                if (tabGen) tabGen.className = 'px-3 py-1 rounded-lg bg-brand-600 text-white font-bold cursor-pointer';
+                if (tabMed) tabMed.className = 'px-3 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold cursor-pointer';
+                if (subtitle) subtitle.textContent = 'Bandeja Privada General • Solo visible para ti y el Profesor';
+            }
+
+            getUserThreadMessages(channelType);
+            renderChatMessages();
+        }
+
+        function openTailoredMaterialChat() {
+            switchUserPrivateChannel('medida');
+            const formPanel = document.getElementById('chat-guided-form-panel');
+            if (formPanel && !formPanel.classList.contains('hidden')) {
+                toggleChatGuidedForm();
+            }
+            renderChatMessages();
+            const modal = document.getElementById('private-chat-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        const chatWizardSteps = [
+            { key: 'requesterName', question: '1️⃣ Para comenzar con gusto: ¿Cuál es tu nombre completo (quien realiza la solicitud)?' },
+            { key: 'email', question: '2️⃣ Agrega por favor tu correo electrónico de contacto (escrito correctamente). Para tu total seguridad y respaldo, a ese correo te enviaremos los precios, la forma de pago (antes de entregar el material) y todo el seguimiento de tu solicitud:' },
+            { key: 'level', question: '3️⃣ ¿El material es para nivel Preescolar o Primaria?' },
+            { key: 'grade', question: '4️⃣ ¿Cuál es el grado escolar específico? (Por ejemplo: "tercer grado de preescolar" o "primer grado de primaria"):' },
+            { key: 'formativeField', question: '5️⃣ ¿Qué campo formativo deseas abordar? (Lenguajes, Saberes y Pensamiento Científico, Ética/Naturaleza, De lo Humano y lo Comunitario; si no sabes cuál elegir, descríbeme el aprendizaje que buscas):' },
+            { key: 'subject', question: '6️⃣ ¿Qué materia o área de conocimiento deseas trabajar? (Por ejemplo: Español, Matemáticas, Ciencias, lectura, escritura, pensamiento matemático, exploración del entorno, habilidades socioemocionales u otra):' },
+            { key: 'topic', question: '7️⃣ ¿Cuál es el tema o aprendizaje específico que quieres trabajar? (Por ejemplo: reconocer letras, comprensión lectora, sumas, resolución de problemas, seres vivos o emociones):' },
+            { key: 'materialType', question: '8️⃣ ¿Qué tipo de material necesitas? (Actividades, ejercicios, juegos, fichas imprimibles, secuencia didáctica, apoyos visuales, cuentos, guía para casa u otro recurso):' },
+            { key: 'purpose', question: '9️⃣ ¿Cuál es el propósito del material? Es decir, ¿qué esperas que el niño o niña practique, comprenda o desarrolle?' },
+            { key: 'preferences', question: '🔟 Por último, si deseas compartirlo: ¿qué necesidades o preferencias debemos considerar? (Intereses, fortalezas, ritmo de trabajo, apoyos que le funcionan, formato preferido o aspectos a evitar). Si no deseas agregar más, escribe "Ninguna".' }
+        ];
+
+        let chatWizardActive = false;
+        let chatWizardStepIndex = 0;
+        let chatWizardData = {};
+
+        function toggleChatGuidedForm() {
+            const formPanel = document.getElementById('chat-guided-form-panel');
+            const msgPanel = document.getElementById('chat-messages');
+            const quickBar = document.getElementById('chat-quick-replies');
+            const inputForm = document.getElementById('chat-input-form');
+            const toggleBtn = document.getElementById('btn-toggle-chat-form');
+
+            const isHidden = formPanel.classList.contains('hidden');
+            if (isHidden) {
+                formPanel.classList.remove('hidden');
+                msgPanel.classList.add('hidden');
+                quickBar.classList.add('hidden');
+                inputForm.classList.add('hidden');
+                if (toggleBtn) toggleBtn.innerHTML = '<i data-lucide="messages-square" class="w-3.5 h-3.5"></i><span>Ver Conversación</span>';
+            } else {
+                formPanel.classList.add('hidden');
+                msgPanel.classList.remove('hidden');
+                quickBar.classList.remove('hidden');
+                inputForm.classList.remove('hidden');
+                if (toggleBtn) toggleBtn.innerHTML = '<i data-lucide="clipboard-list" class="w-3.5 h-3.5"></i><span>Formulario Rápido (10 datos)</span>';
+            }
+            lucide.createIcons();
+        }
+
+        function syncChatGradeOptions() {
+            const level = document.getElementById('cf-level').value;
+            const gradeSelect = document.getElementById('cf-grade');
+            if (!gradeSelect) return;
+            if (level === 'Preescolar') {
+                gradeSelect.innerHTML = `
+                    <option value="Primer grado de preescolar">Primer grado de preescolar</option>
+                    <option value="Segundo grado de preescolar">Segundo grado de preescolar</option>
+                    <option value="Tercer grado de preescolar">Tercer grado de preescolar</option>
+                `;
+            } else {
+                gradeSelect.innerHTML = `
+                    <option value="Primer grado de primaria">Primer grado de primaria</option>
+                    <option value="Segundo grado de primaria">Segundo grado de primaria</option>
+                    <option value="Tercer grado de primaria">Tercer grado de primaria</option>
+                    <option value="Cuarto grado de primaria">Cuarto grado de primaria</option>
+                    <option value="Quinto grado de primaria">Quinto grado de primaria</option>
+                    <option value="Sexto grado de primaria">Sexto grado de primaria</option>
+                `;
+            }
+        }
+
+        function startStepByStepWizard() {
+            chatWizardActive = true;
+            chatWizardStepIndex = 0;
+            chatWizardData = {};
+            const formPanel = document.getElementById('chat-guided-form-panel');
+            if (!formPanel.classList.contains('hidden')) {
+                toggleChatGuidedForm();
+            }
+            appendUserThreadMessage(activeUserChannel, {
+                sender: 'profesor',
+                time: getCurrentTime(),
+                text: `Con mucho gusto te guío paso a paso.\n\n${chatWizardSteps[0].question}`
+            });
+            renderChatMessages();
+            const input = document.getElementById('chat-input');
+            if (input) input.focus();
+        }
+
+        function finalizeStructuredChatRequest(data, resourceContext) {
+            const channelTitle = activeUserChannel === 'medida' ? 'Pedir Material a Medida' : 'Chat Privado General';
+            const threadKey = `${currentPrivateUserToken}::${activeUserChannel}`;
+
+            const summaryText =
+                `📋 Solicitud de Material Didáctico (${channelTitle}):\n` +
+                `1. Solicitante: ${data.requesterName}\n` +
+                `2. Correo electrónico: ${data.email}\n` +
+                `3. Nivel escolar: ${data.level}\n` +
+                `4. Grado específico: ${data.grade}\n` +
+                `5. Campo formativo: ${data.formativeField}\n` +
+                `6. Materia / Área: ${data.subject}\n` +
+                `7. Tema / Aprendizaje: ${data.topic}\n` +
+                `8. Tipo de material: ${data.materialType}\n` +
+                `9. Propósito: ${data.purpose}\n` +
+                `10. Necesidades / Preferencias: ${data.preferences || 'Sin observaciones adicionales'}`;
+
+            activeRequest = {
+                id: 'req-' + Date.now(),
+                threadKey,
+                channelLabel: channelTitle,
+                time: getCurrentTime(),
+                parentName: data.requesterName,
+                childName: resourceContext || data.topic,
+                childGrade: `${data.grade} (${data.level})`,
+                childInterests: `${data.subject} • ${data.materialType}`,
+                childNeeds: `Campo: ${data.formativeField} | Tema: ${data.topic} | Propósito: ${data.purpose} | Preferencias: ${data.preferences || 'Ninguna'}`,
+                email: data.email,
+                title: `${data.materialType} — ${data.topic}`
+            };
+            customRequestsInbox.unshift(activeRequest);
+            saveStoredRequests();
+
+            const orderBar = document.getElementById('active-order-bar');
+            if (orderBar) {
+                orderBar.classList.remove('hidden');
+                document.getElementById('active-order-summary').textContent = `${data.grade} • ${data.subject}: ${data.topic}`;
+            }
+            const statusEl = document.getElementById('active-order-status');
+            if (statusEl) {
+                statusEl.textContent = `Respuesta al correo: ${data.email}`;
+                statusEl.className = 'px-2.5 py-0.5 rounded-full font-semibold bg-emerald-200 text-emerald-900';
+            }
+
+            appendUserThreadMessage(activeUserChannel, {
+                sender: 'parent',
+                time: getCurrentTime(),
+                text: summaryText
+            }, data.requesterName);
+
+            renderChatMessages();
+            renderAdminInbox();
+
+            const targetChannel = activeUserChannel;
+            setTimeout(() => {
+                appendUserThreadMessage(targetChannel, {
+                    sender: 'profesor',
+                    time: getCurrentTime(),
+                    text: `¡Muchas gracias, ${data.requesterName}! He recibido toda la información en tu bandeja privada para preparar una propuesta de ${data.materialType.toLowerCase()} enfocada en "${data.topic}" (${data.subject}) para ${data.grade}.\n\n🛡️ Para tu total tranquilidad y respaldo: los precios detallados, la forma de pago (sin antes entregar el material) y todo el seguimiento formal se enviarán directamente a tu correo electrónico (${data.email}).\n\nSigo pendiente por este espacio privado por si deseas agregar algún otro detalle.`
+                });
+                renderChatMessages();
+                renderAdminInbox();
+            }, 750);
+        }
+
+        function submitGuidedChatForm(event) {
+            event.preventDefault();
+            const data = {
+                requesterName: document.getElementById('cf-requester-name').value.trim(),
+                email: document.getElementById('cf-email').value.trim(),
+                level: document.getElementById('cf-level').value,
+                grade: document.getElementById('cf-grade').value,
+                formativeField: document.getElementById('cf-formative-field').value,
+                subject: document.getElementById('cf-subject').value.trim(),
+                topic: document.getElementById('cf-topic').value.trim(),
+                materialType: document.getElementById('cf-material-type').value,
+                purpose: document.getElementById('cf-purpose').value.trim(),
+                preferences: document.getElementById('cf-preferences').value.trim() || 'Ninguna'
+            };
+
+            toggleChatGuidedForm();
+            finalizeStructuredChatRequest(data, null);
+            showToast('Solicitud privada enviada. Recibirás respuesta en tu correo.');
+        }
+
+        function openPrivateChat(directResourceTitle) {
+            switchUserPrivateChannel('general');
+            if (directResourceTitle) {
+                appendUserThreadMessage('general', {
+                    sender: 'parent',
+                    time: getCurrentTime(),
+                    text: `Hola Profesor Yorente, me interesa solicitar información sobre "${directResourceTitle}".`
+                });
+                appendUserThreadMessage('general', {
+                    sender: 'profesor',
+                    time: getCurrentTime(),
+                    text: `¡Con mucho gusto! Para enviarte con total claridad y seguridad la propuesta de "${directResourceTitle}" a tu correo electrónico —donde te informaremos los precios, la forma de pago (antes de entregar el material) y daremos seguimiento completo— indícame por favor los siguientes datos (puedes responder uno por uno o abrir el Formulario Rápido arriba):\n\n1. Tu nombre completo\n2. Correo electrónico de contacto (escrito correctamente, para enviarte precios, forma de pago y seguimiento)\n3. Nivel y grado escolar específico\n4. Campo formativo y materia o área\n5. Tema específico, tipo de material, propósito y preferencias del niño o niña.`,
+                    hasWizardTrigger: true
+                });
+                renderAdminInbox();
+            }
+
+            const orderBar = document.getElementById('active-order-bar');
+            if (activeRequest) {
+                orderBar.classList.remove('hidden');
+                document.getElementById('active-order-summary').textContent = `${activeRequest.title} • ${activeRequest.childGrade}`;
+            }
+
+            renderChatMessages();
+            const modal = document.getElementById('private-chat-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closePrivateChat() {
+            const modal = document.getElementById('private-chat-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function insertQuickReply(text) {
+            const input = document.getElementById('chat-input');
+            input.value = text;
+            input.focus();
+        }
+
+        function copyBankClabe() {
+            copyTextFallback('012180015489231045');
+            showToast('CLABE Interbancaria copiada al portapapeles');
+        }
+
+        function sendChatMessage(event) {
+            event.preventDefault();
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const targetChannel = activeUserChannel;
+
+            // Flujo guiado pregunta por pregunta dentro del chat
+            if (chatWizardActive) {
+                const currentStep = chatWizardSteps[chatWizardStepIndex];
+                if (currentStep.key === 'email') {
+                    const emailValid = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+                    if (!emailValid) {
+                        appendUserThreadMessage(targetChannel, { sender: 'parent', time: getCurrentTime(), text });
+                        input.value = '';
+                        renderChatMessages();
+                        setTimeout(() => {
+                            appendUserThreadMessage(targetChannel, {
+                                sender: 'profesor',
+                                time: getCurrentTime(),
+                                text: 'Por favor verifica que tu correo electrónico esté escrito correctamente (ejemplo: nombre@correo.com), ya que por ese medio te enviaremos con seguridad los precios, la forma de pago y el seguimiento de tu solicitud:'
+                            });
+                            renderChatMessages();
+                        }, 450);
+                        return;
+                    }
+                    chatWizardData.email = emailValid[0];
+                } else {
+                    chatWizardData[currentStep.key] = text;
+                }
+
+                input.value = '';
+                chatWizardStepIndex++;
+
+                if (chatWizardStepIndex < chatWizardSteps.length) {
+                    const authorUpdate = currentStep.key === 'requesterName' ? text : null;
+                    appendUserThreadMessage(targetChannel, { sender: 'parent', time: getCurrentTime(), text }, authorUpdate);
+                    renderChatMessages();
+                    renderAdminInbox();
+                    setTimeout(() => {
+                        appendUserThreadMessage(targetChannel, {
+                            sender: 'profesor',
+                            time: getCurrentTime(),
+                            text: chatWizardSteps[chatWizardStepIndex].question
+                        });
+                        renderChatMessages();
+                    }, 500);
+                } else {
+                    chatWizardActive = false;
+                    finalizeStructuredChatRequest(chatWizardData, null);
+                }
+                return;
+            }
+
+            appendUserThreadMessage(targetChannel, {
+                sender: 'parent',
+                time: getCurrentTime(),
+                text
+            });
+            input.value = '';
+            renderChatMessages();
+            renderAdminInbox();
+
+            const emailMatch = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+            setTimeout(() => {
+                if (emailMatch) {
+                    if (activeRequest) {
+                        activeRequest.email = emailMatch[0];
+                        saveStoredRequests();
+                    }
+                    const statusEl = document.getElementById('active-order-status');
+                    if (statusEl) {
+                        statusEl.textContent = `Respuesta al correo: ${emailMatch[0]}`;
+                        statusEl.className = 'px-2.5 py-0.5 rounded-full font-semibold bg-emerald-200 text-emerald-900';
+                    }
+                    appendUserThreadMessage(targetChannel, {
+                        sender: 'profesor',
+                        time: getCurrentTime(),
+                        text: `¡Muchas gracias! He registrado de forma segura tu correo electrónico (${emailMatch[0]}). Por ese medio recibirás con claridad los precios, la forma de pago (sin antes entregar el material) y todo el seguimiento personalizado de tu solicitud.`
+                    });
+                } else {
+                    appendUserThreadMessage(targetChannel, {
+                        sender: 'profesor',
+                        time: getCurrentTime(),
+                        text: `Gracias por escribir. Para brindarte total seguridad y claridad, los precios, la forma de pago (antes de entregar el material) y todo el seguimiento se envían directamente a tu correo electrónico.\n\nPor favor incluye tu correo electrónico y los datos de tu solicitud pulsando "Llenar formulario en el chat" o "Responder pregunta por pregunta" aquí abajo.`,
+                        hasWizardTrigger: true
+                    });
+                }
+                renderChatMessages();
+                renderAdminInbox();
+            }, 750);
+        }
+
+        function renderChatMessages() {
+            const container = document.getElementById('chat-messages');
+            if (!container) return;
+
+            const currentMessages = getUserThreadMessages(activeUserChannel);
+            container.innerHTML = currentMessages.map(msg => {
+                const isProfesor = msg.sender === 'profesor';
+                return `
+                    <div class="flex ${isProfesor ? 'justify-start' : 'justify-end'}">
+                        <div class="max-w-[85%] rounded-2xl px-4 py-3 text-xs sm:text-sm shadow-sm ${
+                            isProfesor 
+                            ? 'bg-white border border-slate-200/80 text-slate-800 rounded-tl-sm' 
+                            : 'bg-brand-600 text-white rounded-tr-sm'
+                        }">
+                            <div class="flex items-center justify-between gap-4 mb-1">
+                                <span class="font-bold text-[11px] ${isProfesor ? 'text-brand-700' : 'text-brand-100'}">
+                                    ${isProfesor ? 'Profesor Yorente' : 'Tú (Solo visible para ti y el Profesor)'}
+                                </span>
+                                <span class="text-[10px] ${isProfesor ? 'text-slate-400' : 'text-brand-200'}">${msg.time}</span>
+                            </div>
+                            <p class="whitespace-pre-line leading-relaxed">${msg.text}</p>
+                            ${msg.hasWizardTrigger ? `
+                                <div class="mt-3 pt-2.5 border-t border-slate-100 flex flex-wrap gap-2">
+                                    <button type="button" onclick="toggleChatGuidedForm()" class="px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[11px] font-bold cursor-pointer">
+                                        Abrir Formulario (10 datos)
+                                    </button>
+                                    <button type="button" onclick="startStepByStepWizard()" class="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-[11px] font-bold cursor-pointer">
+                                        Responder 1 por 1
+                                    </button>
+                                </div>
+                            ` : ''}
+                            ${msg.hasBankCard ? `
+                                <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2">
+                                    <span class="text-[11px] font-mono font-bold text-slate-700">0121 8001 5489 2310 45</span>
+                                    <button type="button" onclick="copyBankClabe()" class="px-2.5 py-1 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-[11px] font-bold cursor-pointer">
+                                        Copiar CLABE
+                                    </button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.scrollTop = container.scrollHeight;
+            lucide.createIcons();
+        }
+
+        // =========================================================================
+        // GESTIÓN DE LOS 9 GRADOS (DOCUMENTOS, VIDEOS E IMÁGENES) Y ENLACES PÚBLICOS
+        // =========================================================================
+        const gradeLabels = {
+            'pre-1': '1° Preescolar',
+            'pre-2': '2° Preescolar',
+            'pre-3': '3° Preescolar',
+            'pri-1': '1° Primaria',
+            'pri-2': '2° Primaria',
+            'pri-3': '3° Primaria',
+            'pri-4': '4° Primaria',
+            'pri-5': '5° Primaria',
+            'pri-6': '6° Primaria'
+        };
+
+        const gradeDocuments = {
+            'pre-1': [], 'pre-2': [], 'pre-3': [],
+            'pri-1': [], 'pri-2': [], 'pri-3': [],
+            'pri-4': [], 'pri-5': [], 'pri-6': []
+        };
+
+        const gradeVideos = {
+            'pre-1': null, 'pre-2': null, 'pre-3': null,
+            'pri-1': null, 'pri-2': null, 'pri-3': null,
+            'pri-4': null, 'pri-5': null, 'pri-6': null
+        };
+
+        const gradeImages = {
+            'pre-1': [], 'pre-2': [], 'pre-3': [],
+            'pri-1': [], 'pri-2': [], 'pri-3': [],
+            'pri-4': [], 'pri-5': [], 'pri-6': []
+        };
+
+        function selectGrade(gradeKey) {
+            selectedGrade = gradeKey;
+            document.querySelectorAll('.grade-tab').forEach(btn => {
+                btn.className = 'grade-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-all cursor-pointer';
+            });
+            const activeTab = document.getElementById(`grade-tab-${gradeKey}`);
+            if (activeTab) {
+                activeTab.className = gradeKey.startsWith('pre')
+                    ? 'grade-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-amber-500 text-slate-950 transition-all cursor-pointer'
+                    : 'grade-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-brand-600 text-white transition-all cursor-pointer';
+            }
+            renderGradeVideo();
+            renderGradeImages();
+            renderGradeDocuments();
+        }
+
+        function renderAdminGradesGrid() {
+            const grid = document.getElementById('admin-grades-grid');
+            if (!grid) return;
+            grid.innerHTML = Object.keys(gradeLabels).map(gKey => {
+                const label = gradeLabels[gKey];
+                const docCount = (gradeDocuments[gKey] || []).length;
+                const imgCount = (gradeImages[gKey] || []).length;
+                const hasVid = Boolean(gradeVideos[gKey]);
+                const isPre = gKey.startsWith('pre');
+                return `
+                    <div class="rounded-2xl border ${isPre ? 'border-amber-200 bg-amber-50/40' : 'border-brand-200 bg-brand-50/40'} p-4 flex flex-col justify-between gap-3">
+                        <div>
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="font-display font-bold text-sm text-slate-900">${label}</span>
+                                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full ${isPre ? 'bg-amber-200/80 text-amber-950' : 'bg-brand-200/80 text-brand-950'}">
+                                    ${docCount} doc(s) • ${imgCount} img • ${hasVid ? 'Con video' : 'Sin video'}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <button type="button" onclick="openGradeVideoModal('${gKey}')" class="flex-1 py-2 px-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-[11px] font-bold flex items-center justify-center gap-1 cursor-pointer">
+                                <i data-lucide="video" class="w-3.5 h-3.5"></i>
+                                <span>Video</span>
+                            </button>
+                            <button type="button" onclick="openGradeImageModal(null, '${gKey}')" class="flex-1 py-2 px-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-[11px] font-bold flex items-center justify-center gap-1 cursor-pointer">
+                                <i data-lucide="image-plus" class="w-3.5 h-3.5"></i>
+                                <span>+ Imagen</span>
+                            </button>
+                            <button type="button" onclick="openGradeDocModal(null, '${gKey}')" class="flex-1 py-2 px-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 text-[11px] font-bold flex items-center justify-center gap-1 cursor-pointer">
+                                <i data-lucide="file-plus-2" class="w-3.5 h-3.5"></i>
+                                <span>+ Doc</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function openGradeVideoModal(targetGrade) {
+            if (!isAdminLogged) return;
+            const gradeToUse = targetGrade || selectedGrade;
+            selectGrade(gradeToUse);
+            pendingGradeVideoUrl = null;
+            stopCameraStream();
+            const existing = gradeVideos[gradeToUse];
+            document.getElementById('grade-video-target-grade').value = gradeToUse;
+            document.getElementById('grade-video-grade-select').value = gradeToUse;
+            document.getElementById('grade-video-modal-title').textContent = `Video Explicativo — ${gradeLabels[gradeToUse]}`;
+            document.getElementById('grade-video-title').value = existing ? existing.title : '';
+            document.getElementById('grade-video-desc').value = existing ? existing.description : '';
+            document.getElementById('grade-video-url').value = existing && existing.type === 'embed' ? existing.rawUrl : '';
+            document.getElementById('grade-video-file').value = '';
+            document.getElementById('grade-video-status').textContent = existing ? 'Video actual cargado. Puedes reemplazarlo o actualizar su texto.' : '';
+            const modal = document.getElementById('grade-video-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeGradeVideoModal() {
+            stopCameraStream();
+            const modal = document.getElementById('grade-video-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function stopCameraStream() {
+            if (activeMediaStream) {
+                activeMediaStream.getTracks().forEach(t => t.stop());
+                activeMediaStream = null;
+            }
+            const preview = document.getElementById('camera-preview');
+            if (preview) {
+                preview.srcObject = null;
+                preview.classList.add('hidden');
+            }
+            const ind = document.getElementById('recording-indicator');
+            if (ind) {
+                ind.classList.add('hidden');
+                ind.classList.remove('flex');
+            }
+            const btnStart = document.getElementById('btn-start-record');
+            const btnStop = document.getElementById('btn-stop-record');
+            if (btnStart) btnStart.classList.remove('hidden');
+            if (btnStop) btnStop.classList.add('hidden');
+        }
+
+        async function startVideoRecording() {
+            try {
+                activeMediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                const preview = document.getElementById('camera-preview');
+                preview.srcObject = activeMediaStream;
+                preview.classList.remove('hidden');
+
+                recordedChunks = [];
+                mediaRecorder = new MediaRecorder(activeMediaStream);
+                mediaRecorder.ondataavailable = (e) => {
+                    if (e.data.size > 0) recordedChunks.push(e.data);
+                };
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                    pendingGradeVideoUrl = URL.createObjectURL(blob);
+                    document.getElementById('grade-video-status').textContent = '✓ Video grabado listo para publicar.';
+                    stopCameraStream();
+                };
+                mediaRecorder.start();
+
+                const ind = document.getElementById('recording-indicator');
+                ind.classList.remove('hidden');
+                ind.classList.add('flex');
+                document.getElementById('btn-start-record').classList.add('hidden');
+                document.getElementById('btn-stop-record').classList.remove('hidden');
+            } catch (err) {
+                showToast('No se pudo acceder a la cámara o micrófono en este navegador.');
+            }
+        }
+
+        function stopVideoRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+            }
+        }
+
+        function handleGradeVideoFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            pendingGradeVideoUrl = URL.createObjectURL(file);
+            document.getElementById('grade-video-status').textContent = `✓ Archivo seleccionado: ${file.name}`;
+        }
+
+        function parseVideoEmbedUrl(url) {
+            if (!url) return null;
+            const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+            if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
+            return url;
+        }
+
+        function saveGradeVideo(event) {
+            event.preventDefault();
+            const chosenGrade = document.getElementById('grade-video-grade-select').value || selectedGrade;
+            selectGrade(chosenGrade);
+            const title = document.getElementById('grade-video-title').value.trim();
+            const description = document.getElementById('grade-video-desc').value.trim();
+            const urlInput = document.getElementById('grade-video-url').value.trim();
+            const existing = gradeVideos[chosenGrade];
+
+            if (pendingGradeVideoUrl) {
+                gradeVideos[chosenGrade] = { title, description, type: 'file', src: pendingGradeVideoUrl, rawUrl: '' };
+            } else if (urlInput) {
+                gradeVideos[chosenGrade] = { title, description, type: 'embed', src: parseVideoEmbedUrl(urlInput), rawUrl: urlInput };
+            } else if (existing) {
+                gradeVideos[chosenGrade].title = title;
+                gradeVideos[chosenGrade].description = description;
+            } else {
+                showToast('Graba un video, selecciona un archivo o pega un enlace.');
+                return;
+            }
+
+            closeGradeVideoModal();
+            renderGradeVideo();
+            renderAdminGradesGrid();
+            showToast(`Video explicativo publicado en ${gradeLabels[chosenGrade]}`);
+        }
+
+        function deleteGradeVideo() {
+            if (!isAdminLogged) return;
+            gradeVideos[selectedGrade] = null;
+            renderGradeVideo();
+            renderAdminGradesGrid();
+            showToast('Video eliminado del grado');
+        }
+
+        function renderGradeVideo() {
+            const container = document.getElementById('grade-video-container');
+            if (!container) return;
+            const video = gradeVideos[selectedGrade];
+
+            if (!video) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const playerHtml = video.type === 'embed'
+                ? `<iframe src="${video.src}" class="w-full h-64 sm:h-80 rounded-2xl border border-slate-200" allowfullscreen></iframe>`
+                : `<video src="${video.src}" controls playsinline class="w-full max-h-96 rounded-2xl bg-slate-950 border border-slate-200"></video>`;
+
+            container.innerHTML = `
+                <div class="rounded-3xl bg-white border border-slate-200/90 shadow-md p-5 sm:p-7">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
+                                <i data-lucide="play-circle" class="w-5 h-5"></i>
+                            </span>
+                            <div>
+                                <span class="text-[11px] font-bold uppercase tracking-wider text-amber-600">Video Explicativo • ${gradeLabels[selectedGrade]}</span>
+                                <h3 class="font-display font-bold text-lg text-slate-900">${video.title}</h3>
+                            </div>
+                        </div>
+                        ${isAdminLogged ? `
+                            <div class="flex items-center gap-2">
+                                <button onclick="openGradeVideoModal('${selectedGrade}')" class="px-3 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-bold flex items-center gap-1 cursor-pointer">
+                                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i> Editar Video
+                                </button>
+                                <button onclick="deleteGradeVideo()" class="px-3 py-1.5 rounded-xl bg-rose-100 hover:bg-rose-200 text-rose-700 text-xs font-bold flex items-center gap-1 cursor-pointer">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Quitar
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                    ${video.description ? `<p class="text-xs sm:text-sm text-slate-600 mb-4 leading-relaxed">${video.description}</p>` : ''}
+                    ${playerHtml}
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        // =========================================================================
+        // GESTIÓN DE IMÁGENES POR GRADO (LOS 9 GRADOS)
+        // =========================================================================
+        function openGradeImageModal(imgId, targetGrade) {
+            if (!isAdminLogged) return;
+            const gradeToUse = targetGrade || selectedGrade;
+            selectGrade(gradeToUse);
+            pendingGradeImageUrl = null;
+
+            const modalTitle = document.getElementById('grade-image-modal-title');
+            const idInput = document.getElementById('grade-image-id');
+            const gradeSelect = document.getElementById('grade-image-grade-select');
+            const titleInput = document.getElementById('grade-image-title');
+            const descInput = document.getElementById('grade-image-desc');
+            const urlInput = document.getElementById('grade-image-url');
+            const statusText = document.getElementById('grade-image-status');
+
+            document.getElementById('grade-image-file').value = '';
+            gradeSelect.value = gradeToUse;
+
+            if (imgId) {
+                const existing = (gradeImages[gradeToUse] || []).find(i => i.id === imgId);
+                if (!existing) return;
+                modalTitle.textContent = `Editar Imagen — ${gradeLabels[gradeToUse]}`;
+                idInput.value = existing.id;
+                titleInput.value = existing.title;
+                descInput.value = existing.description || '';
+                urlInput.value = existing.src.startsWith('data:') ? '' : existing.src;
+                statusText.textContent = 'Imagen actual cargada. Puedes reemplazarla o editar su texto.';
+            } else {
+                modalTitle.textContent = `Subir Imagen — ${gradeLabels[gradeToUse]}`;
+                idInput.value = '';
+                titleInput.value = '';
+                descInput.value = '';
+                urlInput.value = '';
+                statusText.textContent = '';
+            }
+
+            const modal = document.getElementById('grade-image-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeGradeImageModal() {
+            const modal = document.getElementById('grade-image-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function handleGradeImageFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                pendingGradeImageUrl = e.target.result;
+                document.getElementById('grade-image-status').textContent = `✓ Imagen lista: ${file.name}`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveGradeImage(event) {
+            event.preventDefault();
+            const imgId = document.getElementById('grade-image-id').value;
+            const chosenGrade = document.getElementById('grade-image-grade-select').value || selectedGrade;
+            selectGrade(chosenGrade);
+            const title = document.getElementById('grade-image-title').value.trim();
+            const description = document.getElementById('grade-image-desc').value.trim();
+            const urlInput = document.getElementById('grade-image-url').value.trim();
+
+            if (!gradeImages[chosenGrade]) gradeImages[chosenGrade] = [];
+
+            if (imgId) {
+                const idx = gradeImages[chosenGrade].findIndex(i => i.id === imgId);
+                if (idx !== -1) {
+                    gradeImages[chosenGrade][idx].title = title;
+                    gradeImages[chosenGrade][idx].description = description;
+                    if (pendingGradeImageUrl) {
+                        gradeImages[chosenGrade][idx].src = pendingGradeImageUrl;
+                    } else if (urlInput) {
+                        gradeImages[chosenGrade][idx].src = urlInput;
+                    }
+                }
+                showToast(`Imagen actualizada en ${gradeLabels[chosenGrade]}`);
+            } else {
+                const finalSrc = pendingGradeImageUrl || urlInput;
+                if (!finalSrc) {
+                    showToast('Selecciona una imagen de tu dispositivo o pega un enlace.');
+                    return;
+                }
+                gradeImages[chosenGrade].unshift({
+                    id: 'gimg-' + Date.now(),
+                    title,
+                    description,
+                    src: finalSrc
+                });
+                showToast(`Imagen publicada en ${gradeLabels[chosenGrade]}`);
+            }
+
+            closeGradeImageModal();
+            renderGradeImages();
+            renderAdminGradesGrid();
+        }
+
+        function deleteGradeImage(imgId) {
+            if (!isAdminLogged) return;
+            gradeImages[selectedGrade] = (gradeImages[selectedGrade] || []).filter(i => i.id !== imgId);
+            renderGradeImages();
+            renderAdminGradesGrid();
+            showToast('Imagen eliminada del grado');
+        }
+
+        function renderGradeImages() {
+            const container = document.getElementById('grade-images-container');
+            if (!container) return;
+            const imgs = gradeImages[selectedGrade] || [];
+
+            if (imgs.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="mb-4 flex items-center justify-between">
+                    <h3 class="font-display font-bold text-lg text-slate-900 flex items-center gap-2">
+                        <i data-lucide="images" class="w-5 h-5 text-emerald-600"></i>
+                        <span>Muestras Visuales • ${gradeLabels[selectedGrade]}</span>
+                    </h3>
+                </div>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    ${imgs.map(img => `
+                        <div class="rounded-3xl bg-white border border-slate-200/80 shadow-sm overflow-hidden flex flex-col justify-between group">
+                            <div class="relative h-56 overflow-hidden bg-slate-100">
+                                <img src="${img.src}" onerror="this.src='https://placehold.co/600x450/10b981/ffffff?text=Material+Didactico'" alt="${img.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                ${isAdminLogged ? `
+                                    <div class="absolute top-3 right-3 flex items-center gap-1.5">
+                                        <button onclick="openGradeImageModal('${img.id}', '${selectedGrade}')" class="px-2.5 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold shadow flex items-center gap-1 cursor-pointer">
+                                            <i data-lucide="pencil" class="w-3.5 h-3.5"></i> Editar
+                                        </button>
+                                        <button onclick="deleteGradeImage('${img.id}')" class="p-1.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white shadow cursor-pointer" title="Eliminar">
+                                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                        </button>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <div class="p-5 flex-1 flex flex-col justify-between">
+                                <div>
+                                    <h4 class="font-display font-bold text-base text-slate-900 mb-1">${img.title}</h4>
+                                    ${img.description ? `<p class="text-xs text-slate-600 leading-relaxed mb-3">${img.description}</p>` : ''}
+                                </div>
+                                <button onclick="openPrivateChat('${img.title} (${gradeLabels[selectedGrade]})')" class="mt-2 w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer">
+                                    <i data-lucide="message-square-lock" class="w-3.5 h-3.5 text-amber-400"></i>
+                                    <span>Solicitar en Chat Privado</span>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function setDocColor(hex) {
+            document.getElementById('grade-doc-color').value = hex;
+        }
+
+        function handleGradeFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                pendingGradeFile = {
+                    name: file.name,
+                    size: (file.size / 1024).toFixed(1) + ' KB',
+                    dataUrl: e.target.result
+                };
+                document.getElementById('grade-doc-file-status').textContent = `Archivo listo: ${file.name} (${pendingGradeFile.size})`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function openGradeDocModal(docId, targetGrade) {
+            if (!isAdminLogged) return;
+            const gradeToUse = targetGrade || selectedGrade;
+            selectGrade(gradeToUse);
+            pendingGradeFile = null;
+            const modalTitle = document.getElementById('grade-doc-modal-title');
+            const idInput = document.getElementById('grade-doc-id');
+            const gradeSelect = document.getElementById('grade-doc-grade');
+            const titleInput = document.getElementById('grade-doc-title');
+            const descInput = document.getElementById('grade-doc-desc');
+            const colorInput = document.getElementById('grade-doc-color');
+            const fileStatus = document.getElementById('grade-doc-file-status');
+            document.getElementById('grade-doc-file').value = '';
+
+            if (docId) {
+                const doc = (gradeDocuments[gradeToUse] || []).find(d => d.id === docId);
+                if (!doc) return;
+                modalTitle.textContent = 'Editar Recurso Didáctico';
+                idInput.value = doc.id;
+                gradeSelect.value = gradeToUse;
+                titleInput.value = doc.title;
+                descInput.value = doc.description;
+                colorInput.value = doc.color || '#0284c7';
+                fileStatus.textContent = doc.fileName ? `Archivo actual: ${doc.fileName}` : 'Sin archivo adjunto';
+            } else {
+                modalTitle.textContent = 'Subir Nuevo Recurso Didáctico';
+                idInput.value = '';
+                gradeSelect.value = gradeToUse;
+                titleInput.value = '';
+                descInput.value = '';
+                colorInput.value = '#0284c7';
+                fileStatus.textContent = 'Ningún archivo seleccionado';
+            }
+
+            const modal = document.getElementById('grade-doc-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeGradeDocModal() {
+            const modal = document.getElementById('grade-doc-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function saveGradeDocument(event) {
+            event.preventDefault();
+            const docId = document.getElementById('grade-doc-id').value;
+            const targetGrade = document.getElementById('grade-doc-grade').value;
+            const title = document.getElementById('grade-doc-title').value.trim();
+            const description = document.getElementById('grade-doc-desc').value.trim();
+            const color = document.getElementById('grade-doc-color').value;
+
+            if (!gradeDocuments[targetGrade]) gradeDocuments[targetGrade] = [];
+
+            if (docId) {
+                let existingDoc = null;
+                Object.keys(gradeDocuments).forEach(g => {
+                    const idx = gradeDocuments[g].findIndex(d => d.id === docId);
+                    if (idx !== -1) {
+                        existingDoc = gradeDocuments[g].splice(idx, 1)[0];
+                    }
+                });
+                const updatedDoc = {
+                    id: docId,
+                    title,
+                    description,
+                    color,
+                    fileName: pendingGradeFile ? pendingGradeFile.name : (existingDoc ? existingDoc.fileName : ''),
+                    fileDataUrl: pendingGradeFile ? pendingGradeFile.dataUrl : (existingDoc ? existingDoc.fileDataUrl : '')
+                };
+                gradeDocuments[targetGrade].unshift(updatedDoc);
+                showToast('Recurso actualizado correctamente');
+            } else {
+                gradeDocuments[targetGrade].unshift({
+                    id: 'doc-' + Date.now(),
+                    title,
+                    description,
+                    color,
+                    fileName: pendingGradeFile ? pendingGradeFile.name : '',
+                    fileDataUrl: pendingGradeFile ? pendingGradeFile.dataUrl : ''
+                });
+                showToast('Documento subido al grado seleccionado');
+            }
+
+            closeGradeDocModal();
+            selectGrade(targetGrade);
+            renderAdminGradesGrid();
+        }
+
+        function deleteGradeDocument(docId) {
+            if (!isAdminLogged) return;
+            gradeDocuments[selectedGrade] = (gradeDocuments[selectedGrade] || []).filter(d => d.id !== docId);
+            renderGradeDocuments();
+            renderAdminGradesGrid();
+            showToast('Recurso eliminado');
+        }
+
+        function renderGradeDocuments() {
+            const container = document.getElementById('grade-docs-container');
+            if (!container) return;
+            const docs = gradeDocuments[selectedGrade] || [];
+
+            if (docs.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = docs.map(doc => `
+                <article class="bg-white rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="h-3.5 w-full" style="background-color: ${doc.color || '#0284c7'}"></div>
+                        <div class="p-6 sm:p-7">
+                            <div class="flex items-center justify-between gap-2 mb-3">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold text-white" style="background-color: ${doc.color || '#0284c7'}">
+                                    ${gradeLabels[selectedGrade]}
+                                </span>
+                                ${isAdminLogged ? `
+                                    <div class="flex items-center gap-1.5">
+                                        <button onclick="openGradeDocModal('${doc.id}', '${selectedGrade}')" class="px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold flex items-center gap-1 cursor-pointer" title="Editar">
+                                            <i data-lucide="pencil" class="w-3.5 h-3.5"></i> Editar
+                                        </button>
+                                        <button onclick="deleteGradeDocument('${doc.id}')" class="p-1.5 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-700 cursor-pointer" title="Eliminar">
+                                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                        </button>
+                                    </div>
+                                ` : ''}
+                            </div>
+
+                            <h3 class="font-display font-bold text-xl text-slate-900 mb-2 leading-snug">${doc.title}</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">${doc.description}</p>
+
+                            ${doc.fileName ? `
+                                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-medium mb-2">
+                                    <i data-lucide="file-check-2" class="w-4 h-4 text-emerald-600"></i>
+                                    <span class="truncate max-w-[200px]">${doc.fileName}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <div class="px-6 pb-6 pt-2 flex flex-col gap-2">
+                        <button onclick="openPrivateChat('${doc.title} (${gradeLabels[selectedGrade]})')" class="w-full py-3 px-4 rounded-xl text-white text-xs sm:text-sm font-bold shadow-sm transition-opacity hover:opacity-90 flex items-center justify-center gap-2 cursor-pointer" style="background-color: ${doc.color || '#0284c7'}">
+                            <i data-lucide="message-square-lock" class="w-4 h-4"></i>
+                            <span>Solicitar en Chat Privado</span>
+                        </button>
+                    </div>
+                </article>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        function copyTextFallback(text) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            tempInput.style.position = 'fixed';
+            tempInput.style.opacity = '0';
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+            } catch (err) {}
+            document.body.removeChild(tempInput);
+        }
+
+        function copyPublicPlatformLink() {
+            const shareInput = document.getElementById('public-share-url');
+            const urlToCopy = shareInput && shareInput.value ? shareInput.value : window.location.href;
+            copyTextFallback(urlToCopy);
+            showToast('¡Link público copiado! Ya puedes pegarlo y compartirlo.');
+        }
+
+        function shareToSocial(network) {
+            const shareInput = document.getElementById('public-share-url');
+            const publicUrl = encodeURIComponent(shareInput && shareInput.value ? shareInput.value : window.location.href);
+            const shareText = encodeURIComponent('Conoce los recursos didácticos del Profesor Yorente para niñas y niños de Preescolar y Primaria:');
+
+            if (network === 'whatsapp') {
+                window.open(`https://api.whatsapp.com/send?text=${shareText}%20${publicUrl}`, '_blank', 'noopener,noreferrer');
+            } else if (network === 'facebook') {
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${publicUrl}`, '_blank', 'noopener,noreferrer');
+            } else if (network === 'twitter') {
+                window.open(`https://twitter.com/intent/tweet?text=${shareText}&url=${publicUrl}`, '_blank', 'noopener,noreferrer');
+            } else if (network === 'tiktok') {
+                copyPublicPlatformLink();
+                showToast('Link público copiado para compartir en TikTok');
+                window.open('https://www.tiktok.com/', '_blank', 'noopener,noreferrer');
+            }
+        }
+    </script>
+</body>
+</html>
